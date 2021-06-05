@@ -17,10 +17,61 @@ dotenv.config();
 
 const driver = neo4j.driver(process.env.DB_URI, neo4j.auth.basic(process.env.DB_USERNAME, process.env.DB_PASSWORD));
 const session = driver.session();
+const tx = session.beginTransaction();
+const dataset = [[sw1_char, sw1_mentions],
+                 [sw2_char, sw2_mentions], 
+                 [sw3_char, sw3_mentions], 
+                 [sw4_char, sw4_mentions], 
+                 [sw5_char, sw5_mentions], 
+                 [sw6_char, sw6_mentions]]
 
-session.run(
-    'CREATE (a:Person {name: $name}) RETURN a',
-    { name: 'Alberto mi diverto' }
-)
-.then(data => console.log(data)) 
-.catch(err => console.log(err))
+dataset.forEach(element => {
+    const [char, mentions] = element;
+
+    char.nodes.forEach(async character => {
+
+        await tx.run(
+            'CREATE (character:Character {name: $name, numberOfScenesAppearedIn: $scenes})',
+            {
+                name: character.name,
+                scenes: character.value
+            }
+        )
+    })
+    
+    char.links.forEach(async link => {
+        const sourceChar = char.nodes[link.source].name;
+        const targetChar = char.nodes[link.target].name;
+    
+        await tx.run(
+            'MATCH (source:Character), (target:Character) \
+                WHERE source.name = $sourceName AND target.name = $targetName \
+                CREATE (source)-[r:SPEAK_WITHIN_IN_THE_SAME_SCENE {times: $times}]->(target)',
+            {
+                sourceName: sourceChar,
+                targetName: targetChar,
+                times: link.value
+            }
+        )
+    })
+    
+    mentions.links.forEach(async link => {
+        const sourceChar = mentions.nodes[link.source].name;
+        const targetChar = mentions.nodes[link.target].name;
+    
+        await tx.run(
+            'MATCH (source:Character), (target:Character) \
+                WHERE source.name = $sourceName AND target.name = $targetName \
+                CREATE (source)-[r:MENTIONED_WITHIN_IN_THE_SAME_SCENE {times: $times}]->(target)',
+            {
+                sourceName: sourceChar,
+                targetName: targetChar,
+                times: link.value
+            }
+        )
+    })
+})
+
+tx.commit()
+.then(() => session.close())
+.then(() => process.exit(0))

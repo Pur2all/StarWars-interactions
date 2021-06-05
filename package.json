@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "nodemon --experimental-json-modules index.js",
+    "populate_db": "node --experimental-json-modules ./dataset/db_populator_script.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
