@@ -23,55 +23,109 @@ const dataset = [[sw1_char, sw1_mentions],
                  [sw3_char, sw3_mentions], 
                  [sw4_char, sw4_mentions], 
                  [sw5_char, sw5_mentions], 
-                 [sw6_char, sw6_mentions]]
+                 [sw6_char, sw6_mentions]];
+const filmsTitles = [
+                        "Star Wars Episode I - The Phantom Menace",
+                        "Star Wars Episode II - Attack of the Clones",
+                        "Star Wars Episode III - Revenge of the Sith",
+                        "Star Wars Episode IV - A New Hope",
+                        "Star Wars Episode V - The Empire Strikes Back",
+                        "Star Wars Episode VI - Return of the Jedi"
+                    ];
+let filmNumber = 0;
+
+filmsTitles.forEach(filmTitle => {
+    tx.run(
+        'CREATE (film:Film {title: $title})',
+        {
+            title: filmTitle
+        }
+    )
+    .catch(error => {
+        console.error(error);
+        process.exit(1);
+    })
+})
 
 dataset.forEach(element => {
     const [char, mentions] = element;
+    const filmTitle = filmsTitles[filmNumber++];
 
     char.nodes.forEach(async character => {
-
-        await tx.run(
-            'CREATE (character:Character {name: $name, numberOfScenesAppearedIn: $scenes})',
-            {
-                name: character.name,
-                scenes: character.value
-            }
-        )
+    
+        try
+        {
+            await tx.run(
+                'MERGE (character:Character {name: $name}) \
+                 WITH character \
+                 MATCH (film:Film) \
+                 WHERE film.title = $title \
+                 CREATE (character)-[r:APPEARED_IN {numberOfScenes: $scenes}]->(film)',
+                {
+                    name: character.name,
+                    scenes: character.value,
+                    title: filmTitle
+                }
+            )
+        } 
+        catch (error) 
+        {
+            console.error(error);
+            process.exit(1);
+        }
     })
     
     char.links.forEach(async link => {
         const sourceChar = char.nodes[link.source].name;
         const targetChar = char.nodes[link.target].name;
     
-        await tx.run(
-            'MATCH (source:Character), (target:Character) \
-                WHERE source.name = $sourceName AND target.name = $targetName \
-                CREATE (source)-[r:SPEAK_WITHIN_IN_THE_SAME_SCENE {times: $times}]->(target)',
-            {
-                sourceName: sourceChar,
-                targetName: targetChar,
-                times: link.value
-            }
-        )
+        try
+        {
+            await tx.run(
+                'MATCH (source:Character), (target:Character) \
+                 WHERE source.name = $sourceName AND target.name = $targetName \
+                 CREATE (source)-[r:SPEAK_WITHIN_IN_THE_SAME_SCENE {times: $times, film: $film}]->(target)',
+                {
+                    sourceName: sourceChar,
+                    targetName: targetChar,
+                    times: link.value,
+                    film: filmTitle
+                }
+            )
+        }
+        catch (error)
+        {
+            console.error(error);
+            process.exit(1);
+        }
     })
     
     mentions.links.forEach(async link => {
         const sourceChar = mentions.nodes[link.source].name;
         const targetChar = mentions.nodes[link.target].name;
     
-        await tx.run(
-            'MATCH (source:Character), (target:Character) \
-                WHERE source.name = $sourceName AND target.name = $targetName \
-                CREATE (source)-[r:MENTIONED_WITHIN_IN_THE_SAME_SCENE {times: $times}]->(target)',
-            {
-                sourceName: sourceChar,
-                targetName: targetChar,
-                times: link.value
-            }
-        )
+        try
+        {
+            await tx.run(
+                'MATCH (source:Character), (target:Character) \
+                 WHERE source.name = $sourceName AND target.name = $targetName \
+                 CREATE (source)-[r:MENTIONED_WITHIN_IN_THE_SAME_SCENE {times: $times, film: $film}]->(target)',
+                {
+                    sourceName: sourceChar,
+                    targetName: targetChar,
+                    times: link.value,
+                    film: filmTitle
+                }
+            )
+        }
+        catch (error)
+        {
+            console.error(error);
+            process.exit(1);
+        }
     })
 })
 
 tx.commit()
-.then(() => session.close())
-.then(() => process.exit(0))
+    .then(() => session.close())
+    .then(() => process.exit(0))
