@@ -1,0 +1,11 @@
+1) 
+Tutti i film in cui un certo personaggio appare.
+
+MATCH(character:Character {name:"LUKE"})-[r:APPEARED_IN]->(film:Film) return film
+
+2)  Interazioni di un certo personaggio in uno specifico film
+
+MATCH(character:Character{name:"LUKE"})-[r:SPEAK_WITHIN_IN_THE_SAME_SCENE{film:"Star Wars Episode IV - A New Hope"}]-(c) return character,r, c
+
+3) Dato un gruppo di personaggi restituisce tutti i personaggi che hanno interagito con questi in uno specifico film
+MATCH(character:Character)-[r:SPEAK_WITHIN_IN_THE_SAME_SCENE{film:"Star Wars Episode IV - A New Hope"}]-(c) WHERE character.name in ["LUKE", "LEIA"]  return character,r, c
