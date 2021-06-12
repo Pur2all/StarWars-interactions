@@ -24,21 +24,24 @@ const dataset = [[sw1_char, sw1_mentions],
                  [sw4_char, sw4_mentions], 
                  [sw5_char, sw5_mentions], 
                  [sw6_char, sw6_mentions]];
-const filmsTitles = [
-                        "Star Wars Episode I - The Phantom Menace",
-                        "Star Wars Episode II - Attack of the Clones",
-                        "Star Wars Episode III - Revenge of the Sith",
-                        "Star Wars Episode IV - A New Hope",
-                        "Star Wars Episode V - The Empire Strikes Back",
-                        "Star Wars Episode VI - Return of the Jedi"
-                    ];
+
+const films = [
+                {title: "Star Wars Episode I - The Phantom Menace", year: 1999},
+                {title: "Star Wars Episode II - Attack of the Clones", year: 2002},
+                {title: "Star Wars Episode III - Revenge of the Sith", year: 2005},
+                {title: "Star Wars Episode IV - A New Hope", year: 1977},
+                {title: "Star Wars Episode V - The Empire Strikes Back", year: 1980},
+                {title: "Star Wars Episode VI - Return of the Jedi", year: 1983}
+              ];
+
 let filmNumber = 0;
 
-filmsTitles.forEach(filmTitle => {
+films.forEach(film => {
     tx.run(
-        'CREATE (film:Film {title: $title})',
+        'CREATE (film:Film {title: $title, year: toInteger($year)})',
         {
-            title: filmTitle
+            title: film.title,
+            year: film.year
         }
     )
     .catch(error => {
@@ -49,8 +52,8 @@ filmsTitles.forEach(filmTitle => {
 
 dataset.forEach(element => {
     const [char, mentions] = element;
-    const filmTitle = filmsTitles[filmNumber++];
-
+    const filmTitle = films[filmNumber++].title;
+    
     char.nodes.forEach(async character => {
     
         try
@@ -124,6 +127,7 @@ dataset.forEach(element => {
             process.exit(1);
         }
     })
+    
 })
 
 tx.commit()
