@@ -1,56 +1,16 @@
-import express from 'express'
+import express from 'express';
+import dotenv from 'dotenv';
+import characterService from './services/characterService.js';
+import filmService from './services/filmService.js';
 
-var app = express();
+dotenv.config();
 
-// respond with "hello world" when a GET request is made to the homepage
-app.get('/character/:characterName', function(req, res) {
-  res.send('hello world');
+const port = process.env.EXPRESS_PORT || 3000;
+const app = express();
+
+app.listen(port, function() {
+    console.log("Server started on port " + port);
 });
 
-app.get('/character/:characters/:filmTitle', function(req, res) {
-    res.send('hello world');
-  });
-
-app.get('/character/speak/:characterNames', function(req, res) {
-    res.send('hello world');
-});
-
-app.get('/film/appeared/firstTimeStory/:characterName', function(req, res) {
-    res.send('hello world');
-  });
-
-  
-app.get('/film/appeared/firstTimeFilmPub/:characterName', function(req, res) {
-    res.send('hello world');
-  });
-
-app.get('/film/mentioned/firstTimeStory/:characterName', function(req, res) {
-    res.send('hello world');
-});
-
-
-app.get('/film/mentioned/firstTimeFilmPub/:characterName', function(req, res) {
-    res.send('hello world');
-});
-
-
-app.get('/character/speak/together/:characterNames', function(req, res) {
-    res.send('hello world');
-});
-
-app.get('/film/:filmTitle', function(req, res) {
-    res.send('hello world');
-  });
-
-app.get('/film/mentioned/:filmTitle', function(req, res) {
-    res.send('hello world');
-});
-
-app.get('/film/appeared/:filmTitle', function(req, res) {
-    res.send('hello world');
-});
-
-  
-app.listen(3000, function(){
-    console.log("Lodo è bello")
-});
+characterService(app);
+filmService(app);
