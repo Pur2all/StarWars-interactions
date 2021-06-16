@@ -1,3 +1,4 @@
+import require from 'express';
 import express from 'express';
 import dotenv from 'dotenv';
 import characterService from './services/characterService.js';
@@ -7,6 +8,12 @@ dotenv.config();
 
 const port = process.env.EXPRESS_PORT || 3000;
 const app = express();
+const path = require('path');
+app.use(express.static('public'));
+app.get('/', function(req, res) 
+{
+    res.sendFile('homepage.html', {root: './page'});
+});
 
 app.listen(port, function() {
     console.log("Server started on port " + port);
