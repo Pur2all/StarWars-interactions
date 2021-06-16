@@ -1,10 +1,10 @@
-import film from '../models/film.js';
+import Film from '../models/film.js';
 
 const characters = (req, res) => {
 
-}
+};
 
 
 export default {
-    characters
-}
+  characters,
+};

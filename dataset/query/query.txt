@@ -1,43 +1,43 @@
 1) 
 Tutti i film in cui un certo personaggio appare.
-
 MATCH(character:Character {name:"LUKE"})-[r:APPEARED_IN]->(film:Film) return film
 
-2)  Interazioni di un certo personaggio in uno specifico film
 
+2)  Interazioni di un certo personaggio in uno specifico film
 MATCH(character:Character{name:"LUKE"})-[r:SPEAK_WITHIN_IN_THE_SAME_SCENE{film:"Star Wars Episode IV - A New Hope"}]-(c) return character,r, c
 
-3) Dato un gruppo di personaggi restituisce tutti i personaggi che hanno interagito con questi in uno specifico film
 
+3) Dato un gruppo di personaggi restituisce tutti i personaggi che hanno interagito con questi in uno specifico film
 MATCH(character:Character)-[r:SPEAK_WITHIN_IN_THE_SAME_SCENE{film:"Star Wars Episode IV - A New Hope"}]-(c) WHERE character.name in ["LUKE", "LEIA"]  return character,r, c
 
-4) Personaggi che appaiono in un film
 
+4) Personaggi che appaiono in un film
 MATCH(character:Character)-[r:APPEARED_IN]-(film:Film) WHERE film.title in ["Star Wars Episode IV - A New Hope"] return character
 
-5) Personaggi menzionati in un film
 
+5) Personaggi menzionati in un film
 MATCH(character:Character)-[r:MENTIONED_WITHIN_IN_THE_SAME_SCENE]-() WHERE r.film in ["Star Wars Episode IV - A New Hope"] return character
 
-6) Quante volte dei personaggi specificati appiono insieme
 
+6) Quante volte dei personaggi specificati appiono insieme
 MATCH (c1:Character)-[r:SPEAK_WITHIN_IN_THE_SAME_SCENE]-(c2:Character) return c1, collect(r.film), c2, sum(r.times)
 
-7)Prime apparizioni in ordine cronologico di storia
 
+7)Prime apparizioni in ordine cronologico di storia - FATTA
 MATCH (c:Character)-[r:APPEARED_IN]-(film:Film) WHERE c.name ="LUKE" return film ORDER BY id(film) LIMIT 1
 
-8) Prime apparizioni in ordine di uscita dei film 
 
+8) Prime apparizioni in ordine di uscita dei film - FATTA
 MATCH (c:Character)-[r:APPEARED_IN]-(film:Film) WHERE c.name ="ANAKIN" return film ORDER BY film.year LIMIT 1
 
-9) Prime menzioni  in ordine cronologi di storia
+
+9) Prime menzioni  in ordine cronologi di storia FATTA
 MATCH (c:Character)-[r:MENTIONED_WITHIN_IN_THE_SAME_SCENE]-() WHERE c.name ="LUKE" return r.film ORDER BY r.film LIMIT 1
 
-10) Prime menzioni in ordine di uscita di un film
 
+10) Prime menzioni in ordine di uscita di un film FATTA
 MATCH (c:Character)-[r:MENTIONED_WITHIN_IN_THE_SAME_SCENE]-() WHERE c.name ="LUKE" WITH r.film as t MATCH (f:Film ) WHERE f.title = t return f ORDER BY f.year LIMIT 1 
 
-11) Restituisce true se due persone hanno parlato 
 
+11) Restituisce true se due persone hanno parlato 
 return exists((:Character{name:"LUKE"})-[:SPEAK_WITHIN_IN_THE_SAME_SCENE]-(:Character{name: "PADME"}))

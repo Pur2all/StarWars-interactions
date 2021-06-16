@@ -1,0 +1,59 @@
+{
+    "env": {
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "google"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "rules": {
+        "require-jsdoc": "off",
+        "newline-per-chained-call": [
+            "error", 
+            { 
+                "ignoreChainWithDepth": 1
+            }
+        ],
+        "no-multi-str": "off",
+        "max-len": "off",
+        "arrow-spacing": "error",
+        "key-spacing": "error",
+        "space-in-parens": "error",
+        "space-infix-ops": "error",
+        "no-multi-spaces": "error",
+        "padding-line-between-statements": [
+            "error",
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "return"
+            },
+            { 
+                "blankLine": "always", 
+                "prev": ["const", "let", "var"], 
+                "next": "*"
+            },
+            { 
+                "blankLine": "any", 
+                "prev": ["const", "let", "var"], 
+                "next": ["const", "let", "var"]
+            }
+        ],
+        "space-unary-ops": [
+            "error", 
+            {
+                "words": true,
+                "nonwords": false
+            }
+        ]
+    }
+}
