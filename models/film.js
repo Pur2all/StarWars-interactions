@@ -91,67 +91,69 @@ class Film {
 
   /*
     Input: lista di film
-    Output: personaggi che appaiono nei film 
+    Output: personaggi che appaiono nei film
   */
-  static async characterAppearedInFilm(filmTitles){
-    if(!filmTitles)
-      throw new Error('No filmTitle parameter')
-    
-    const session = driver.session()
+  static async characterAppearedInFilm(filmTitles) {
+    if (!filmTitles) {
+      throw new Error('No filmTitle parameter');
+    };
+
+    const session = driver.session();
 
     return session.run(
         'MATCH (character:Character)-[r:APPEARED_IN]-(film:Film) \
          WHERE film.title in $filmList \
          RETURN character, film.title',
         {
-          filmList: filmTitles
-        }
+          filmList: filmTitles,
+        },
     )
-        .then((result)=>{
-          session.close()
-        
-          const c = result.records.map((r)=>r.get('character').properties)
-          const film = result.records.map((r)=>r.get('film.title'))
-      
-          const zip = (a, b) => a.map((k, i) => [k, b[i]])
-          const characterInFilm = zip(c,film) 
-          console.log(characterInFilm)
-          return characterInFilm
-        })
+        .then((result) => {
+          session.close();
+
+          const c = result.records.map((r) => r.get('character').properties);
+          const film = result.records.map((r) => r.get('film.title'));
+
+          const zip = (a, b) => a.map((k, i) => [k, b[i]]);
+          const characterInFilm = zip(c, film);
+
+          return characterInFilm;
+        });
   }
 
   /*
     Input: lista di film
     Output: personaggi che sono menzionati nei film specificati
   */
-  static async characterMentionedInFilm(filmTitles){
-    if(!filmTitles)
-      throw new Error('No filmTitle parameter')
-    
-    const session = driver.session()
+  static async characterMentionedInFilm(filmTitles) {
+    if (!filmTitles) {
+      throw new Error('No filmTitle parameter');
+    };
+
+    const session = driver.session();
 
     return session.run(
         'MATCH(character:Character)-[r:MENTIONED_WITHIN_IN_THE_SAME_SCENE]-(c) \
          WHERE r.film in $filmList \
          RETURN DISTINCT character, r.film, c',
         {
-          filmList: filmTitles
-        }
+          filmList: filmTitles,
+        },
     )
-        .then((result)=>{
-          session.close()
-        
-          const c1 = result.records.map((r)=>r.get('character').properties)
-          const film = result.records.map((r)=>r.get('r.film'))
-          const c2 = result.records.map((r)=>r.get('c').properties)
-      
-          const zip = (a, b, c) => a.map((k, i) => [k, b[i], c[i]])
-          const characterInFilm = zip(c1, film, c2) 
-          console.log(characterInFilm)
-          return characterInFilm
-        })
+        .then((result) => {
+          session.close();
+
+          const c1 = result.records.map((r) => r.get('character').properties);
+          const film = result.records.map((r) => r.get('r.film'));
+          const c2 = result.records.map((r) => r.get('c').properties);
+
+          const zip = (a, b, c) => a.map((k, i) => [k, b[i], c[i]]);
+          const characterInFilm = zip(c1, film, c2)
+;
+
+          return characterInFilm;
+        });
   }
-  
 }
 
 
