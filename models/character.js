@@ -97,6 +97,29 @@ class Character {
                     })
 
     }
+    /*
+      Input: 2 nomi
+      Output: true se i due personaggi hanno parlato insieme, false altrimenti
+   */
+    static async charactersAreAppearedToghether(characterName1, characterName2){
+        if(!characterName1)
+            throw new Error('No characterName1 parameter')
+        
+        if(!characterName2)
+            throw new Error('No characterName2 parameter')
+        
+        const session = driver.session()
+        
+        return session.run('RETURN exists((:Character{name :$name1})-[:SPEAK_WITHIN_IN_THE_SAME_SCENE]-(:Character{name: $name2})) as e',
+                    {
+                        name1: characterName1,
+                        name2: characterName2
+                    })
+                    .then((result)=>{
+                        session.close()
+                        return result.records.map(r => r.get('e'))
+                    })
+    }
     
 }
 

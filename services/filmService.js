@@ -25,11 +25,19 @@ export default (app) => {
     res.send('hello world');
   });
 
-  app.get('/film/mentioned/:filmTitle', function(req, res) {
+  /*
+    Input: lista di film
+    Output: personaggi che sono menzionati nei film specificati
+  */
+  app.get('/film/mentioned/:filmTitles', function(req, res) {
     res.send('hello world');
   });
 
-  app.get('/film/appeared/:filmTitle', function(req, res) {
+  /*
+    Input: lista di film
+    Output: personaggi che appaiono nei film specificati
+  */
+  app.get('/film/appeared/:filmTitles', function(req, res) {
     res.send('hello world');
   });
 };

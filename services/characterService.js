@@ -22,4 +22,13 @@ export default (app) => {
   app.get('/character/speak/:characterName1/:characterName2', function(req, res) {
       res.send('hello world');
   });
+
+  /*
+      Input: 2 nomi
+      Output: true se i due personaggi hanno parlato insieme, false altrimenti
+  */
+      app.get('/character/interacted/:characterName1/:characterName2', function(req, res) {
+        res.send('hello world');
+    });
+  
 }
