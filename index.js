@@ -9,8 +9,11 @@ const port = process.env.EXPRESS_PORT || 3000;
 const app = express();
 
 app.use(express.static('public'));
+
+// set the view engine to ejs (serve per far funzionare le ejs nei progetti express)
+app.set('view engine', 'ejs');
 app.get('/', function(req, res) {
-  res.sendFile('homepage.html', {root: './page'});
+  res.render('./pages/homepage');
 });
 
 app.listen(port, function() {
