@@ -3,6 +3,14 @@ import Character from '../models/character.js';
 const OK_STATUS = 200;
 
 
+const find = (req, res) => {
+  Character.find(req.params.characterName)
+      .then((result) => {
+        res.status(OK_STATUS)
+            .render('./pages/character', {character: result});
+      });
+};
+
 const filmsCharacterAppeared = (req, res) => {
   Character.filmsInWhichCharacterAppeared(req.params.characterName)
       .then((result) => {
@@ -38,6 +46,7 @@ const areAppearedToghether = (req, res) => {
 };
 
 export default {
+  find,
   filmsCharacterAppeared,
   charactersInteractionInFilm,
   filmInWhichTwoCharacterSpeak,

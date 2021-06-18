@@ -6,6 +6,23 @@ class Film {
     this.year = film.year;
   }
 
+  static async find(filmTitle) {
+    const session = driver.session();
+
+    return session.run(
+        'MATCH (film:Film {title: $title}) \
+         RETURN film',
+        {
+          title: filmTitle,
+        },
+    )
+        .then((result) => {
+          session.close();
+
+          return result.records[0].get('film').properties;
+        });
+  }
+
   static async firstAppearenceHistory(characterName) {
     const session = driver.session();
 

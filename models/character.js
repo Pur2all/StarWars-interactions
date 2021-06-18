@@ -6,6 +6,22 @@ class Character {
     this.scenes = character.scenes;
   }
 
+  static async find(characterName) {
+    const session = driver.session();
+
+    return session.run(
+        'MATCH (character:Character {name: $name}) \
+         RETURN character',
+        {
+          name: characterName,
+        },
+    )
+        .then((result) => {
+          session.close();
+
+          return result.records[0].get('character').properties;
+        });
+  }
 
   /*
         Input: nome di un personaggio
@@ -25,8 +41,7 @@ class Character {
     },
     )
         .then((result) => {
-          session.close()
-          ;
+          session.close();
 
           return result.records.map((r) => r.get('film').properties);
         });
@@ -63,11 +78,9 @@ class Character {
           const zip = (a, b, c) => a.map((k, i) => [k, b[i], c[i]]);
 
 
-          const speakWith = zip(c1, r, c2)
-;
+          const speakWith = zip(c1, r, c2);
 
-          session.close()
-          ;
+          session.close();
 
           return speakWith;
         });
@@ -127,8 +140,7 @@ class Character {
           name2: characterName2,
         })
         .then((result) => {
-          session.close()
-          ;
+          session.close();
 
           return result.records.map((r) => r.get('e'));
         });
