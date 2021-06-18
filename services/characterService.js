@@ -31,4 +31,10 @@ export default (app) => {
       Output: true se i due personaggi hanno parlato insieme, false altrimenti
   */
   app.get('/character/interacted/:characterName1/:characterName2', CharacterControl.areAppearedToghether);
+
+  /*
+      Input: nome di un personaggio
+      Output: lista di personaggi che non conosce
+  */
+  app.get('/character/notknows/:characterName', CharacterControl.charactersNotKnown);
 };

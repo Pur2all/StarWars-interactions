@@ -45,10 +45,19 @@ const areAppearedToghether = (req, res) => {
       });
 };
 
+const charactersNotKnown = (req, res) => {
+  Character.charactersNotKnown(req.params.characterName)
+      .then((result) => {
+        res.status(OK_STATUS)
+            .send({characters: result});
+      });
+};
+
 export default {
   find,
   filmsCharacterAppeared,
   charactersInteractionInFilm,
   filmInWhichTwoCharacterSpeak,
   areAppearedToghether,
+  charactersNotKnown,
 };

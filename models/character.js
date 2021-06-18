@@ -145,6 +145,22 @@ class Character {
           return result.records.map((r) => r.get('e'));
         });
   }
+
+  static async charactersNotKnown(characterName) {
+    const session = driver.session();
+
+    return session.run('MATCH (n:Character {name: $name}), (m:Character) \
+                        WHERE NOT (n)-[]-(m) AND m.name <> n.name \
+                        RETURN m',
+    {
+      name: characterName,
+    })
+        .then((result) => {
+          session.close();
+
+          return result.records.map((r) => r.get('m').properties);
+        });
+  }
 }
 
 
