@@ -23,6 +23,20 @@ class Film {
         });
   }
 
+  static async findAll() {
+    const session = driver.session();
+
+    return session.run(
+        'MATCH (film:Film) \
+         RETURN film',
+    )
+        .then((result) => {
+          session.close();
+
+          return result.records.map((record) => record.get(film).properties);
+        });
+  }
+
   static async firstAppearenceHistory(characterName) {
     const session = driver.session();
 

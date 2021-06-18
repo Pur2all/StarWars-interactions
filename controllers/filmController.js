@@ -11,6 +11,14 @@ const find = (req, res) => {
       });
 };
 
+const findAll = (req, res) => {
+  Film.findAll()
+      .then((result) => {
+        res.status(OK_STATUS)
+            .render('./pages/films', {films: result});
+      });
+};
+
 const firstAppearanceOfCharacterOrderByHistory = (req, res) => {
   Film.firstAppearenceHistory(req.params.characterName)
       .then((result) => {
@@ -65,6 +73,7 @@ const charactersAppearedInFilms = (req, res) => {
 
 export default {
   find,
+  findAll,
   firstAppearanceOfCharacterOrderByHistory,
   firstAppearanceOfCharacterOrderByPub,
   firstMentionOfCharacterOrderByHistory,

@@ -7,6 +7,8 @@ export default (app) => {
   */
   app.get('/film/:filmTitle', FilmControl.find);
 
+  app.get('/films', FilmControl.findAll);
+
   app.get('/film/appeared/firstTimeStory/:characterName', FilmControl.firstAppearanceOfCharacterOrderByHistory);
 
   app.get('/film/appeared/firstTimeFilmPub/:characterName', FilmControl.firstAppearanceOfCharacterOrderByPub);
