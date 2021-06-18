@@ -53,6 +53,14 @@ const charactersNotKnown = (req, res) => {
       });
 };
 
+const findAll = (req, res) => {
+  Character.findAll()
+      .then((result) => {
+        res.status(OK_STATUS)
+            .render('./pages/characters', {character: result});
+      });
+};
+
 export default {
   find,
   filmsCharacterAppeared,
@@ -60,4 +68,5 @@ export default {
   filmInWhichTwoCharacterSpeak,
   areAppearedToghether,
   charactersNotKnown,
+  findAll,
 };

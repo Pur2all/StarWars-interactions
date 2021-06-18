@@ -161,6 +161,19 @@ class Character {
           return result.records.map((r) => r.get('m').properties);
         });
   }
+
+  static async findAll() {
+    const session = driver.session();
+
+    return session.run(
+        'MATCH (characters:Character) \
+         RETURN characters')
+        .then((result) => {
+          session.close();
+
+          return result.records.map((r) => r.get('characters').properties);
+        });
+  }
 }
 
 

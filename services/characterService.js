@@ -37,4 +37,9 @@ export default (app) => {
       Output: lista di personaggi che non conosce
   */
   app.get('/character/notknows/:characterName', CharacterControl.charactersNotKnown);
+
+  /*
+      Output: Tutti i personaggi
+  */
+  app.get('/characters', CharacterControl.findAll);
 };
