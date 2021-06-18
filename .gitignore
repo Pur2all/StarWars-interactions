@@ -102,3 +102,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Some annoying files
+public/lib/fontawesome/webfonts/fa-solid-900.eot
+public/lib/fontawesome/webfonts/fa-solid-900.ttf
