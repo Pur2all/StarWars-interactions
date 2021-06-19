@@ -1,0 +1,19 @@
+.page-item > .page-link
+{
+    border: 1px solid #212529ab;
+    background-color: #212529ab;
+    color: white;
+}
+.page-item.disabled > .page-link
+{
+    border: 1px solid #212529ab;
+    background-color: #212529ab;
+    color:white;
+}
+
+.page-item.active > .page-link
+{
+    border: 1px solid #212529ab;
+    background-color: #ffc107;
+    color:black;
+}

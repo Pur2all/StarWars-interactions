@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="it" class="h-100">
+<head>
+    <%- include('./headLib.ejs') %>
+    <link href="/css/films.css" rel="stylesheet">
+    <title>Lista film</title>
+</head>
+<body class="d-flex h-100 text-center text-white bg-dark"> 
+  <div class="container-fluid d-flex p-0 w-100 h-100 mx-0 flex-column">
+    <header class="mb-auto">
+      <div class="container-fluid p-0">
+        <%- include('./nav.ejs') %>
+      </div> 
+    </header>
+
+    <main class="container-fluid mx-auto">
+      <div class="row d-flex justify-content-center" style="margin-bottom: 20px;">
+        <div class="col-sm-3">
+          <div class="card" style="background-color: #212529ab!important;">
+            <span><i class="fas fa-film fa-10x p-3"></i></span>
+            <div class="card-body">
+              <h5 class="card-title">Mario baldi e il ritorno di bocconcino</h5>
+              <p class="card-text text-truncate" style="max-width: 400px;">Con la partecipazione di uno scemo chiamato Lorenzo</p>
+              <a href="/film?name=example" class="btn btn-warning">Vedi scheda film</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="card" style="background-color: #212529ab!important;">
+            <span><i class="fas fa-film fa-10x p-3"></i></span>
+            <div class="card-body">
+              <h5 class="card-title">Mario baldi lo scontro finale</h5>
+              <p class="card-text text-truncate" style="max-width: 400px;">Qui mario baldi ha cacciato la sua spada laseraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+              <a href="/film?name=example" class="btn btn-warning">Vedi scheda film</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="card" style="background-color: #212529ab!important;">
+            <span><i class="fas fa-film fa-10x p-3"></i></span>
+            <div class="card-body">
+              <h5 class="card-title">Bocconcino vs Ciccio Migliaro</h5>
+              <p class="card-text text-truncate" style="max-width: 400px;">Mamma mia che scontro pieno di sangue, così tanto che Ciccio è andato all'ospedale</p>
+              <a href="/film?name=example" class="btn btn-warning">Vedi scheda film</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row d-flex justify-content-center" style="margin-bottom: 20px;">
+        <div class="col-sm-3">
+          <div class="card" style="background-color: #212529ab!important;">
+            <span><i class="fas fa-film fa-10x p-3"></i></span>
+            <div class="card-body">
+              <h5 class="card-title">Lorenzo conosce Ciccio Migliaro</h5>
+              <p class="card-text text-truncate" style="max-width: 400px;">Due scemi che si incontrano e si conoscono, film poco interessante</p>
+              <a href="/film?name=example" class="btn btn-warning">Vedi scheda film</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="card" style="background-color: #212529ab!important;">
+            <span><i class="fas fa-film fa-10x p-3"></i></span>
+            <div class="card-body">
+              <h5 class="card-title">Lorenzo e il triplo salto mortale</h5>
+              <p class="card-text text-truncate" style="max-width: 400px;">Film pieno d'azione, uno scemo qualunque Lorenzo ha scoperto il triplo salto mortale</p>
+              <a href="/film?name=example" class="btn btn-warning">Vedi scheda film</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="card" style="background-color: #212529ab!important;">
+            <span><i class="fas fa-film fa-10x p-3"></i></span>
+            <div class="card-body">
+              <h5 class="card-title">Lodo uccide Lorenzo (Finalmente)</h5>
+              <p class="card-text text-truncate" style="max-width: 400px;">Bellissimo film, dove Lodo uccide Lorenzo, facendo un piacere all'umanità</p>
+              <a href="/film?name=example" class="btn btn-warning">Vedi scheda film</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Precedente</a>
+          </li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">Successivo</a>
+          </li>
+        </ul>
+      </nav>
+    </main>
+  
+    <%- include('./footer.ejs') %>
+  </div>
+ 
+</body>
+</html>

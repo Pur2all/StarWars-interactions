@@ -1,52 +1,21 @@
 <!DOCTYPE html>
 <html lang="it" class="h-100">
 <head>
-    <script src="/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/lib/fontawesome/js/all.js"></script>
-    <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/lib/fontawesome/css/all.css" rel="stylesheet">
-    <link href="/css/homepage.css" rel="stylesheet">
-    <link href="/css/homepage-footer.css" rel="stylesheet">
-    <meta charset="UTF-8">
+    <%- include('./headLib.ejs') %>
+    <script src="/js/playaudio.js"></script>
     <title>StarWars homepage</title>
 </head>
 <body class="d-flex h-100 text-center text-white bg-dark"> 
+  <span id="musicControl" onclick="pauseAudio()" class="float">
+    <i class="fas fa-pause"></i> Ferma musica
+  </span>
+  <audio id="soundtrack" autoplay>
+    <source src="sound/soundtrack.m4a" type="audio/mpeg">
+  </audio>
   <div class="container-fluid d-flex p-0 w-100 h-100 mx-0 flex-column">
     <header class="mb-auto">
       <div class="container-fluid p-0">
-        <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
-          <div class="container-fluid">
-            <a class="navbar-brand" href="#"><img width="130" height="60" src="/img/logo.png"></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dropdown
-                  </a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                  </ul>
-                </li>
-              </ul>
-              <form style="width: 100%;" class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Cerca film e personaggi" aria-label="Search">
-                <button class="btn btn-outline-warning" type="submit">Cerca</button>
-              </form>
-            </div>
-          </div>
-        </nav>
+        <%- include('./nav.ejs') %>
       </div> 
     </header>
 
@@ -56,7 +25,7 @@
           <div class="card" style="background-color: #212529ab!important;">
             <span><i class="fas fa-film fa-10x p-3"></i></span>
             <div class="card-body">
-              <a href="#" class="btn btn-warning">Vedi lista film</a>
+              <a href="/films" class="btn btn-warning">Vedi lista film</a>
             </div>
           </div>
         </div>
@@ -64,17 +33,31 @@
           <div class="card" style="background-color: #212529ab!important;">
             <span><i class="fas fa-male fa-10x p-2"></i></span>
             <div class="card-body">
-              <a href="#" class="btn btn-warning">Vedi lista personaggi</a>
+              <a href="/personaggi" class="btn btn-warning">Vedi lista personaggi</a>
             </div>
           </div>
         </div>
       </div>
     </main>
-  
-    <footer class="mt-auto text-white">
-      <p>Copyright © 2000-2021 StartWars - Tutti i diritti riservati</p>
-    </footer>
+    <%- include('./footer.ejs') %>
   </div>
  
 </body>
+<script>
+  var x = document.getElementById('soundtrack');
+  function pauseAudio() {
+    x.pause();
+    var control = document.getElementById('musicControl');
+    control.innerHTML="";
+    control.innerHTML= '<i class="fas fa-play"></i> Avvia musica</span>'
+    control.onclick = playAudio;
+  }
+  function playAudio() {
+    x.play();
+    var control = document.getElementById('musicControl');
+    control.innerHTML="";
+    control.innerHTML= '<i class="fas fa-pause"></i> Ferma musica</span>'
+    control.onclick = pauseAudio;
+  }
+</script>
 </html>

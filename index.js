@@ -16,7 +16,18 @@ app.set('view engine', 'ejs');
 app.get('/', function(req, res) {
   res.render('./pages/homepage');
 });
-
+app.get('/films', function(req, res) {
+  res.render('./pages/films');
+});
+app.get('/personaggi', function(req, res) {
+  res.render('./pages/personaggi');
+});
+app.get('/film', function(req, res) {
+  res.render('./pages/film');
+});
+app.get('/personaggio', function(req, res) {
+  res.render('./pages/personaggio');
+});
 app.listen(port, function() {
   console.log('Server started on port ' + port);
 });
