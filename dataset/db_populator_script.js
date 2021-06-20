@@ -1,15 +1,15 @@
-import sw1_char from './interactions/starwars-episode-1-interactions-allCharacters.json';
-import sw1_mentions from './interactions/starwars-episode-1-mentions.json';
-import sw2_char from './interactions/starwars-episode-2-interactions-allCharacters.json';
-import sw2_mentions from './interactions/starwars-episode-1-mentions.json';
-import sw3_char from './interactions/starwars-episode-3-interactions-allCharacters.json';
-import sw3_mentions from './interactions/starwars-episode-3-mentions.json';
-import sw4_char from './interactions/starwars-episode-4-interactions-allCharacters.json';
-import sw4_mentions from './interactions/starwars-episode-4-mentions.json';
-import sw5_char from './interactions/starwars-episode-5-interactions-allCharacters.json';
-import sw5_mentions from './interactions/starwars-episode-5-mentions.json';
-import sw6_char from './interactions/starwars-episode-6-interactions-allCharacters.json';
-import sw6_mentions from './interactions/starwars-episode-6-mentions.json';
+import sw1Char from './interactions/starwars-episode-1-interactions-allCharacters.json';
+import sw1Mentions from './interactions/starwars-episode-1-mentions.json';
+import sw2Char from './interactions/starwars-episode-2-interactions-allCharacters.json';
+import sw2Mentions from './interactions/starwars-episode-1-mentions.json';
+import sw3Char from './interactions/starwars-episode-3-interactions-allCharacters.json';
+import sw3Mentions from './interactions/starwars-episode-3-mentions.json';
+import sw4Char from './interactions/starwars-episode-4-interactions-allCharacters.json';
+import sw4Mentions from './interactions/starwars-episode-4-mentions.json';
+import sw5Char from './interactions/starwars-episode-5-interactions-allCharacters.json';
+import sw5Mentions from './interactions/starwars-episode-5-mentions.json';
+import sw6Char from './interactions/starwars-episode-6-interactions-allCharacters.json';
+import sw6Mentions from './interactions/starwars-episode-6-mentions.json';
 import neo4j from 'neo4j-driver';
 import dotenv from 'dotenv';
 import axios from 'axios';
@@ -20,12 +20,12 @@ const driver = neo4j.driver(process.env.DB_URI, neo4j.auth.basic(process.env.DB_
 const session = driver.session();
 const tx = session.beginTransaction();
 const dataset = [
-  [sw1_char, sw1_mentions],
-  [sw2_char, sw2_mentions],
-  [sw3_char, sw3_mentions],
-  [sw4_char, sw4_mentions],
-  [sw5_char, sw5_mentions],
-  [sw6_char, sw6_mentions],
+  [sw1Char, sw1Mentions],
+  [sw2Char, sw2Mentions],
+  [sw3Char, sw3Mentions],
+  [sw4Char, sw4Mentions],
+  [sw5Char, sw5Mentions],
+  [sw6Char, sw6Mentions],
 ];
 
 const films = [
