@@ -1,12 +1,12 @@
 {
   "nodes": [
     {
-      "name": "EMPEROR",
+      "name": "PALPATINE",
       "value": 62,
       "colour": "#191970"
     },
     {
-      "name": "COUNT DOOKU",
+      "name": "DOOKU",
       "value": 14,
       "colour": "#808080"
     },
@@ -26,7 +26,7 @@
       "colour": "#ce3b59"
     },
     {
-      "name": "GENERAL GRIEVOUS",
+      "name": "GRIEVOUS",
       "value": 35,
       "colour": "#808080"
     },
@@ -61,7 +61,7 @@
       "colour": "#9a9a00"
     },
     {
-      "name": "PADME",
+      "name": "PADM",
       "value": 40,
       "colour": "#DDA0DD"
     },
@@ -96,7 +96,7 @@
       "colour": "#808080"
     },
     {
-      "name": "CAPTAIN TYPHO",
+      "name": "GREGAR TYPHO",
       "value": 5,
       "colour": "#808080"
     },
@@ -141,7 +141,7 @@
       "colour": "#A0522D"
     },
     {
-      "name": "CAPTAIN ANTILLES",
+      "name": "RAYMUS ANTILLES",
       "value": 3,
       "colour": "#808080"
     },

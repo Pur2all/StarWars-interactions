@@ -6,12 +6,12 @@
       "colour": "#bde0f6"
     },
     {
-      "name": "CAPTAIN TYPHO",
+      "name": "GREGAR TYPHO",
       "value": 5,
       "colour": "#808080"
     },
     {
-      "name": "EMPEROR",
+      "name": "PALPATINE",
       "value": 7,
       "colour": "#191970"
     },
@@ -61,7 +61,7 @@
       "colour": "#ce3b59"
     },
     {
-      "name": "PADME",
+      "name": "PADM",
       "value": 24,
       "colour": "#DDA0DD"
     },
@@ -141,7 +141,7 @@
       "colour": "#808080"
     },
     {
-      "name": "COUNT DOOKU",
+      "name": "DOOKU",
       "value": 9,
       "colour": "#808080"
     },

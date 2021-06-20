@@ -1,7 +1,7 @@
 {
   "nodes": [
     {
-      "name": "COUNT DOOKU",
+      "name": "DOOKU",
       "value": 20,
       "colour": "#808080"
     },
@@ -11,7 +11,7 @@
       "colour": "#bde0f6"
     },
     {
-      "name": "PADME",
+      "name": "PADM",
       "value": 51,
       "colour": "#DDA0DD"
     },
@@ -21,12 +21,12 @@
       "colour": "#9a9a00"
     },
     {
-      "name": "CAPTAIN TYPHO",
+      "name": "GREGAR TYPHO",
       "value": 8,
       "colour": "#808080"
     },
     {
-      "name": "EMPEROR",
+      "name": "PALPATINE",
       "value": 9,
       "colour": "#191970"
     },

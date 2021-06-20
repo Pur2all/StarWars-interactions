@@ -21,17 +21,17 @@
       "colour": "#808080"
     },
     {
-      "name": "GENERAL GRIEVOUS",
+      "name": "GRIEVOUS",
       "value": 13,
       "colour": "#808080"
     },
     {
-      "name": "EMPEROR",
+      "name": "PALPATINE",
       "value": 25,
       "colour": "#191970"
     },
     {
-      "name": "COUNT DOOKU",
+      "name": "DOOKU",
       "value": 3,
       "colour": "#808080"
     },
@@ -46,7 +46,7 @@
       "colour": "#FFD700"
     },
     {
-      "name": "PADME",
+      "name": "PADM",
       "value": 24,
       "colour": "#DDA0DD"
     },
@@ -76,7 +76,7 @@
       "colour": "#808080"
     },
     {
-      "name": "CAPTAIN TYPHO",
+      "name": "GREGAR TYPHO",
       "value": 4,
       "colour": "#808080"
     },
@@ -111,7 +111,7 @@
       "colour": "#808080"
     },
     {
-      "name": "CAPTAIN ANTILLES",
+      "name": "RAYMUS ANTILLES",
       "value": 4,
       "colour": "#808080"
     },
