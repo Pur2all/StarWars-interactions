@@ -12,18 +12,21 @@ import sw6_char from './interactions/starwars-episode-6-interactions-allCharacte
 import sw6_mentions from './interactions/starwars-episode-6-mentions.json';
 import neo4j from 'neo4j-driver';
 import dotenv from 'dotenv';
+import axios from 'axios';
 
 dotenv.config();
 
 const driver = neo4j.driver(process.env.DB_URI, neo4j.auth.basic(process.env.DB_USERNAME, process.env.DB_PASSWORD));
 const session = driver.session();
 const tx = session.beginTransaction();
-const dataset = [[sw1_char, sw1_mentions],
+const dataset = [
+  [sw1_char, sw1_mentions],
   [sw2_char, sw2_mentions],
   [sw3_char, sw3_mentions],
   [sw4_char, sw4_mentions],
   [sw5_char, sw5_mentions],
-  [sw6_char, sw6_mentions]];
+  [sw6_char, sw6_mentions],
+];
 
 const films = [
   {title: 'Star Wars Episode I - The Phantom Menace', year: 1999},
@@ -58,10 +61,10 @@ dataset.forEach((element) => {
     try {
       await tx.run(
           'MERGE (character:Character {name: $name}) \
-                 WITH character \
-                 MATCH (film:Film) \
-                 WHERE film.title = $title \
-                 CREATE (character)-[r:APPEARED_IN {numberOfScenes: $scenes}]->(film)',
+           WITH character \
+           MATCH (film:Film) \
+           WHERE film.title = $title \
+           CREATE (character)-[r:APPEARED_IN {numberOfScenes: $scenes}]->(film)',
           {
             name: character.name,
             scenes: character.value,
@@ -81,8 +84,8 @@ dataset.forEach((element) => {
     try {
       await tx.run(
           'MATCH (source:Character), (target:Character) \
-                 WHERE source.name = $sourceName AND target.name = $targetName \
-                 CREATE (source)-[r:SPEAK_WITHIN_IN_THE_SAME_SCENE {times: $times, film: $film}]->(target)',
+           WHERE source.name = $sourceName AND target.name = $targetName \
+           CREATE (source)-[r:SPEAK_WITHIN_IN_THE_SAME_SCENE {times: $times, film: $film}]->(target)',
           {
             sourceName: sourceChar,
             targetName: targetChar,
@@ -103,8 +106,8 @@ dataset.forEach((element) => {
     try {
       await tx.run(
           'MATCH (source:Character), (target:Character) \
-                 WHERE source.name = $sourceName AND target.name = $targetName \
-                 CREATE (source)-[r:MENTIONED_WITHIN_IN_THE_SAME_SCENE {times: $times, film: $film}]->(target)',
+           WHERE source.name = $sourceName AND target.name = $targetName \
+           CREATE (source)-[r:MENTIONED_WITHIN_IN_THE_SAME_SCENE {times: $times, film: $film}]->(target)',
           {
             sourceName: sourceChar,
             targetName: targetChar,
@@ -119,6 +122,46 @@ dataset.forEach((element) => {
   });
 });
 
-tx.commit()
-    .then(() => session.close())
-    .then(() => process.exit(0));
+(async () => {
+  const result = await tx.run(
+      'MATCH (character:Character) \
+       RETURN character',
+  );
+  const characterList = result.records.map((record) => record.get('character').properties);
+
+  const promises = characterList.map(async (character) => {
+    try {
+      const response = await axios.get('https://swapi.dev/api/people/?search=' + character.name);
+      const characterProp = response.data.results[0];
+
+      delete characterProp.homeworld;
+      delete characterProp.films;
+      delete characterProp.species;
+      delete characterProp.vehicles;
+      delete characterProp.starships;
+      delete characterProp.created;
+      delete characterProp.edited;
+      delete characterProp.url;
+
+      return tx.run(
+          'MATCH (character:Character {name: $name}) \
+           SET character = $props',
+          {
+            name: character.name,
+            props: characterProp,
+          },
+      );
+    } catch (error) {
+      console.log('Info not found for character ' + character.name);
+    }
+  });
+
+  await Promise.all(promises);
+  await tx.commit();
+  await session.close();
+})()
+    .then(() => {
+      console.log('Database populated');
+      process.exit(0);
+    })
+    .catch((err) => console.log(err));
