@@ -4,7 +4,7 @@
     <%- include('./headLib.ejs') %>
     <link href="/css/films.css" rel="stylesheet">
     <script src="/js/utils.js"></script>
-    <title>Lista film</title>
+    <title>Lista personaggi</title>
 </head>
 <body class="d-flex h-100 text-center text-white bg-dark"> 
   <div class="container-fluid d-flex p-0 w-100 h-100 mx-0 flex-column">
@@ -21,11 +21,10 @@
         <% } %>  
         <div class="col-sm-3">
           <div class="card" style="background-color: #212529ab!important;">
-            <span><i class="fas fa-film fa-10x p-3"></i></span>
+            <span><i class="fas fa-male fa-10x p-2"></i></span>
             <div class="card-body">
-              <h5 class="card-title text-truncate" style="max-width: 400px;"><%= films[i]['title'] %></h5>
-              <!--<p class="card-text text-truncate" style="max-width: 400px;">Con la partecipazione di uno scemo chiamato Lorenzo</p>!-->
-              <a href="/film?name=example" class="btn btn-warning">Vedi scheda film</a>
+              <h5 class="card-title text-truncate" style="max-width: 400px;"><%= characters[i]['name'] %></h5>
+              <a href="/personaggio?name=example" class="btn btn-warning">Vedi scheda personaggio</a>
             </div>
           </div>
         </div>
@@ -41,9 +40,10 @@
   
     <%- include('./footer.ejs') %>
   </div>
+ 
 </body>
 <script> 
-  var films = JSON.parse(htmlDecode("<%= JSON.stringify(films) %>"));
-  spawnPagination(films.length)
+  var characters = JSON.parse(htmlDecode("<%= JSON.stringify(characters) %>"));
+  spawnPagination(characters.length)
 </script>
 </html>

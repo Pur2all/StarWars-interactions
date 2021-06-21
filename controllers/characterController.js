@@ -57,7 +57,7 @@ const findAll = (req, res) => {
   Character.findAll()
       .then((result) => {
         res.status(OK_STATUS)
-            .render('./pages/characters', {character: result});
+            .render('./pages/characters', {characters: result});
       });
 };
 
