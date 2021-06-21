@@ -29,22 +29,23 @@ const dataset = [
 ];
 
 const films = [
-  {title: 'Star Wars Episode I - The Phantom Menace', year: 1999},
-  {title: 'Star Wars Episode II - Attack of the Clones', year: 2002},
-  {title: 'Star Wars Episode III - Revenge of the Sith', year: 2005},
-  {title: 'Star Wars Episode IV - A New Hope', year: 1977},
-  {title: 'Star Wars Episode V - The Empire Strikes Back', year: 1980},
-  {title: 'Star Wars Episode VI - Return of the Jedi', year: 1983},
+  {title: 'Star Wars Episode I - The Phantom Menace', year: 1999, imgLink: 'https://i.ibb.co/XDKp8tN/I.webp'},
+  {title: 'Star Wars Episode II - Attack of the Clones', year: 2002, imgLink: 'https://i.ibb.co/fC9J0cD/II.webp'},
+  {title: 'Star Wars Episode III - Revenge of the Sith', year: 2005, imgLink: 'https://i.ibb.co/F5XMmR9/III.webp'},
+  {title: 'Star Wars Episode IV - A New Hope', year: 1977, imgLink: 'https://i.ibb.co/wpZ9wjP/IV.webp'},
+  {title: 'Star Wars Episode V - The Empire Strikes Back', year: 1980, imgLink: 'https://i.ibb.co/x8FkPpc/V.webp'},
+  {title: 'Star Wars Episode VI - Return of the Jedi', year: 1983, imgLink: 'https://i.ibb.co/M8Zxd9J/VI.webp'},
 ];
 
 let filmNumber = 0;
 
 films.forEach((film) => {
   tx.run(
-      'CREATE (film:Film {title: $title, year: toInteger($year)})',
+      'CREATE (film:Film {title: $title, year: toInteger($year), imgLink: $imgLink})',
       {
         title: film.title,
         year: film.year,
+        imgLink: film.imgLink,
       },
   )
       .catch((error) => {
