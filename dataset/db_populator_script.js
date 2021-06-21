@@ -13,6 +13,7 @@ import sw6Mentions from './interactions/starwars-episode-6-mentions.json';
 import neo4j from 'neo4j-driver';
 import dotenv from 'dotenv';
 import axios from 'axios';
+import cheerio from 'cheerio';
 
 dotenv.config();
 
@@ -132,28 +133,37 @@ dataset.forEach((element) => {
 
   const promises = characterList.map(async (character) => {
     try {
-      const response = await axios.get('https://swapi.dev/api/people/?search=' + character.name);
-      const characterProp = response.data.results[0];
+      const responseProps = await axios.get('https://swapi.dev/api/people/?search=' + character.name);
+      const characterProps = responseProps.data.results[0];
 
-      delete characterProp.homeworld;
-      delete characterProp.films;
-      delete characterProp.species;
-      delete characterProp.vehicles;
-      delete characterProp.starships;
-      delete characterProp.created;
-      delete characterProp.edited;
-      delete characterProp.url;
+      delete characterProps.homeworld;
+      delete characterProps.films;
+      delete characterProps.species;
+      delete characterProps.vehicles;
+      delete characterProps.starships;
+      delete characterProps.created;
+      delete characterProps.edited;
+      delete characterProps.url;
 
+      const html = await axios.get('https://en.wikipedia.org/wiki/' + characterProps.name);
+      const $ = cheerio.load(html.data);
+
+      const image = $('.infobox-image')
+          .find('img')
+          .attr('src');
+
+      characterProps.image = image;
+    } catch (error) {
+      console.log('Some info not found for character ' + character.name);
+    } finally {
       return tx.run(
           'MATCH (character:Character {name: $name}) \
            SET character = $props',
           {
             name: character.name,
-            props: characterProp,
+            props: characterProps,
           },
       );
-    } catch (error) {
-      console.log('Info not found for character ' + character.name);
     }
   });
 
