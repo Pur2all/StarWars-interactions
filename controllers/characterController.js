@@ -61,6 +61,14 @@ const findAll = (req, res) => {
       });
 };
 
+const search = (req, res) => {
+  Film.search(req.params.characterName)
+      .then((result) => {
+        res.status(OK_STATUS)
+            .send({characters: result});
+      });
+};
+
 export default {
   find,
   filmsCharacterAppeared,
@@ -69,4 +77,5 @@ export default {
   areAppearedToghether,
   charactersNotKnown,
   findAll,
+  search,
 };

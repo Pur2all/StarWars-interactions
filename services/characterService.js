@@ -42,4 +42,6 @@ export default (app) => {
       Output: Tutti i personaggi
   */
   app.get('/characters', CharacterControl.findAll);
+
+  app.get('/characters/search/:characterName', CharacterControl.search);
 };

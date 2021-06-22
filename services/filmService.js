@@ -28,4 +28,6 @@ export default (app) => {
     Output: personaggi che appaiono nei film specificati
   */
   app.get('/film/appeared/:filmTitles', FilmControl.charactersAppearedInFilms);
+
+  app.get('/film/search/:filmTitle', FilmControl.search);
 };

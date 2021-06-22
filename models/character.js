@@ -174,6 +174,24 @@ class Character {
           return result.records.map((r) => r.get('characters').properties);
         });
   }
+
+  static async search(characterName) {
+    const session = driver.session();
+
+    return session.run(
+        'MATCH (characters:Character) \
+         WHERE characters.name =~ \'(?i).*$name.*\' \
+         RETURN characters',
+        {
+          name: characterName,
+        },
+    )
+        .then((result) => {
+          session.close();
+
+          return result.records.map((r) => r.get('characters').properties);
+        });
+  }
 }
 
 

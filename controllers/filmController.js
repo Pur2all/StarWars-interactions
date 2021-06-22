@@ -71,6 +71,14 @@ const charactersAppearedInFilms = (req, res) => {
       });
 };
 
+const search = (req, res) => {
+  Film.search(req.params.filmTitle)
+      .then((result) => {
+        res.status(OK_STATUS)
+            .send({films: result});
+      });
+};
+
 export default {
   find,
   findAll,
@@ -80,4 +88,5 @@ export default {
   firstMentionOfCharacterOrderByPub,
   charactersMentionedInFilms,
   charactersAppearedInFilms,
+  search,
 };

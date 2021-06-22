@@ -179,10 +179,27 @@ class Film {
           const c2 = result.records.map((r) => r.get('c').properties);
 
           const zip = (a, b, c) => a.map((k, i) => [k, b[i], c[i]]);
-          const characterInFilm = zip(c1, film, c2)
-;
+          const characterInFilm = zip(c1, film, c2);
 
           return characterInFilm;
+        });
+  }
+
+  static async search(filmTitle) {
+    const session = driver.session();
+
+    return session.run(
+        'MATCH (film:Film) \
+         WHERE film.title =~ \'(?i).*$title.*\' \
+         RETURN film',
+        {
+          title: filmTitle,
+        },
+    )
+        .then((result) => {
+          session.close();
+
+          return result.records.map((r) => r.get('film').properties);
         });
   }
 }
