@@ -130,7 +130,7 @@ const films = [
     });
   });
 
-  (async () => {
+  await (async () => {
     const result = await tx.run(
         'MATCH (character:Character) \
        RETURN character',

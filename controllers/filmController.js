@@ -52,9 +52,9 @@ const firstMentionOfCharacterOrderByPub = (req, res) => {
 };
 
 const charactersMentionedInFilms = (req, res) => {
-  const filmsList = req.params.film.split(',');
+  const filmsList = req.params.filmTitles.split(',');
 
-  Film.mentionedInFilms(filmsList)
+  Film.characterMentionedInFilm(filmsList)
       .then((result) => {
         res.status(OK_STATUS)
             .send({characters: result});
@@ -62,7 +62,7 @@ const charactersMentionedInFilms = (req, res) => {
 };
 
 const charactersAppearedInFilms = (req, res) => {
-  const filmsList = req.params.film.split(',');
+  const filmsList = req.params.filmTitles.split(',');
 
   Film.characterAppearedInFilm(filmsList)
       .then((result) => {

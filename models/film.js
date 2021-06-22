@@ -134,7 +134,7 @@ class Film {
     return session.run(
         'MATCH (character:Character)-[r:APPEARED_IN]-(film:Film) \
          WHERE film.title in $filmList \
-         RETURN character, film.title',
+         RETURN DISTINCT character',
         {
           filmList: filmTitles,
         },
@@ -142,13 +142,7 @@ class Film {
         .then((result) => {
           session.close();
 
-          const c = result.records.map((r) => r.get('character').properties);
-          const film = result.records.map((r) => r.get('film.title'));
-
-          const zip = (a, b) => a.map((k, i) => [k, b[i]]);
-          const characterInFilm = zip(c, film);
-
-          return characterInFilm;
+          return result.records.map((r) => r.get('character').properties);
         });
   }
 
@@ -166,7 +160,7 @@ class Film {
     return session.run(
         'MATCH(character:Character)-[r:MENTIONED_WITHIN_IN_THE_SAME_SCENE]-(c) \
          WHERE r.film in $filmList \
-         RETURN DISTINCT character, r.film, c',
+         RETURN DISTINCT character',
         {
           filmList: filmTitles,
         },
@@ -174,14 +168,7 @@ class Film {
         .then((result) => {
           session.close();
 
-          const c1 = result.records.map((r) => r.get('character').properties);
-          const film = result.records.map((r) => r.get('r.film'));
-          const c2 = result.records.map((r) => r.get('c').properties);
-
-          const zip = (a, b, c) => a.map((k, i) => [k, b[i], c[i]]);
-          const characterInFilm = zip(c1, film, c2);
-
-          return characterInFilm;
+          return result.records.map((r) => r.get('character').properties);
         });
   }
 
