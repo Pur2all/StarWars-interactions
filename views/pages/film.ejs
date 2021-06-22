@@ -18,15 +18,22 @@
         <div class="card mb-3" style="max-width: 1040px;background-color: #212529ab!important;">
           <div class="row g-0">
             <div class="col-md-6">
-              <span><i class="fas fa-film fa-10x p-3"></i></span>
+              <% if(film['imgLink'] != null) {%>
+                <span><img src="<%= film['imgLink'] %>" style="max-width: 200px;max-height: 250px;margin-top:20px" class="img-thumbnail" alt="img_not_found"></span>
+              <% } 
+                else
+                { %>
+                <span><i class="fas fa-film fa-10x p-3"></i></span>
+              <%}
+              %>  
             </div>
             <div class="col-md-6" style="margin-top:30px">
               <div class="card-body">
                 <h5 class="card-title"><%= film['title']%></h5>
-                <p class="card-text">Con la partecipazione di uno scemo chiamato Lorenzo</p>
+                <!--<p class="card-text">Con la partecipazione di uno scemo chiamato Lorenzo</p>-->
               </div>
             </div>
-            <div class="col-md-12">
+            <!--<div class="col-md-12">
               <div class="row p-3">
                 <div class="col-md-6">
                   <div class="">
@@ -52,7 +59,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
         </div>
 
     </main>

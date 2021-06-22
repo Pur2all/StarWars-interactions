@@ -3,6 +3,7 @@
 <head>
     <%- include('./headLib.ejs') %>
     <link href="/css/films.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/js/utils.js"></script>
     <title>Lista film</title>
 </head>
@@ -17,11 +18,21 @@
     <main class="container-fluid mx-auto">
       <% for(var i=0; i<6; i++) {%>
         <% if (i % 3 == 0) { %>
-          <div class="row d-flex justify-content-center" style="margin-bottom: 20px;">
+          <div class="row d-flex justify-content-center  mb-auto">
         <% } %>  
         <div class="col-sm-3">
           <div class="card" style="background-color: #212529ab!important;">
-            <span><i class="fas fa-film fa-10x p-3"></i></span>
+            <div class="form-check" style="margin-left: 10px;margin-top: 10px;">
+              <input class="form-check-input" type="checkbox" value="" id="check<%=i%>">
+            </div>
+            <% if(films[i]['imgLink'] != null) {%>
+              <span><img src="<%= films[i]['imgLink'] %>" style="max-width: 200px;max-height: 250px;margin-top:20px" class="img-thumbnail" alt="img_not_found"></span>
+            <% } 
+              else
+              { %>
+              <span><i class="fas fa-film fa-10x p-3"></i></span>
+            <%}
+            %>  
             <div class="card-body">
               <h5 class="card-title text-truncate" style="max-width: 400px;"><%= films[i]['title'] %></h5>
               <!--<p class="card-text text-truncate" style="max-width: 400px;">Con la partecipazione di uno scemo chiamato Lorenzo</p>!-->
@@ -34,13 +45,39 @@
         <% } %>  
       <% } %>
     </main>
-  
+    <div class="container-fluid mx-auto">
+      <div class="row d-flex justify-content-center" style="margin-bottom: 20px;">
+        <div class="col-sm-9">
+          <div class="card" style="background-color: #212529ab!important;">
+            <div class="card-body">
+              <h5 class="card-title justify-content-center">Cerca personaggi menzionati nei film selezionati</h5>
+              <button type="button" onclick="" class="btn btn-warning">Cerca personaggi menzionati</button>
+              <button type="button" onclick="" class="btn btn-warning">Cerca personaggi che appaiono</button>
+            </div>
+          </div>
+        </div>    
+      </div>  
+    </div>
+
     <%- include('./footer.ejs') %>
   </div>
 </body>
 <script> 
   var films = JSON.parse(htmlDecode("<%= JSON.stringify(films) %>"));
-  console.log(films);
-  spawnPagination(films.length)
+  console.log('/film/mentioned/<%=films[0]["title"]%>');
+  function ajaxCall(path)
+  {
+    resultData = "";
+    $.ajax({
+        url: path,
+        success: function (result) 
+        {
+          resultData=result;
+        },
+        async: false
+    });
+    return resultData;
+  }
+  console.log(ajaxCall('/film/mentioned/<%=films[0]["title"]%>'));
 </script>
 </html>
