@@ -23,9 +23,7 @@
           <div class="card" style="background-color: #212529ab!important;">
             <div class="card-body">
               <% if(characters[i]['image'] != null) {%>
-                <span><img src="<%= characters[i]['image'] %>" style="    width: 70%;
-                  height: 160px;
-                  background-size: cover;" class="img-thumbnail" alt="img_not_found"></span>
+                <span><img src="<%= characters[i]['image'] %>" style="width: 70%;height: 160px;background-size: cover;" class="img-thumbnail" alt="img_not_found"></span>
               <% } 
                 else
                 { %>
@@ -53,7 +51,6 @@
 </body>
 <script> 
   var characters = JSON.parse(htmlDecode("<%= JSON.stringify(characters) %>"));
-  console.log(characters);
   spawnPagination(characters.length)
 </script>
 </html>

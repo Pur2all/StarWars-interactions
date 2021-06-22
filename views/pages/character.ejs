@@ -18,7 +18,14 @@
         <div class="card mb-3" style="max-width: 1040px;background-color: #212529ab!important;">
           <div class="row g-0">
             <div class="col-md-6">
-              <span><i class="fas fa-male fa-10x p-2"></i></span>
+              <% if(character['image'] != null) {%>
+                <span><img src="<%= character['image'] %>" style="width: 70%;height: 200px;background-size: cover;" class="img-thumbnail" alt="img_not_found"></span>
+              <% } 
+                else
+                { %>
+                <span><i class="fas fa-male fa-10x p-2"></i></span>
+              <%}
+              %>  
             </div>
             <div class="col-md-6" style="margin-top:30px">
               <div class="card-body">
