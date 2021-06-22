@@ -38,153 +38,160 @@ const films = [
   {title: 'Star Wars Episode VI - Return of the Jedi', year: 1983, imgLink: 'https://i.ibb.co/M8Zxd9J/VI.webp'},
 ];
 
-let filmNumber = 0;
 
-films.forEach((film) => {
-  tx.run(
-      'CREATE (film:Film {title: $title, year: toInteger($year), imgLink: $imgLink})',
-      {
-        title: film.title,
-        year: film.year,
-        imgLink: film.imgLink,
-      },
-  )
-      .catch((error) => {
-        console.error(error);
-        process.exit(1);
-      });
-});
+(async () => {
+  await tx.run(
+      'MATCH (n) DETACH DELETE n',
+  );
 
-dataset.forEach((element) => {
-  const [char, mentions] = element;
-  const filmTitle = films[filmNumber++].title;
+  let filmNumber = 0;
 
-  char.nodes.forEach(async (character) => {
-    try {
-      await tx.run(
-          'MERGE (character:Character {name: $name}) \
+  films.forEach((film) => {
+    tx.run(
+        'CREATE (film:Film {title: $title, year: toInteger($year), imgLink: $imgLink})',
+        {
+          title: film.title,
+          year: film.year,
+          imgLink: film.imgLink,
+        },
+    )
+        .catch((error) => {
+          console.error(error);
+          process.exit(1);
+        });
+  });
+
+  dataset.forEach((element) => {
+    const [char, mentions] = element;
+    const filmTitle = films[filmNumber++].title;
+
+    char.nodes.forEach(async (character) => {
+      try {
+        await tx.run(
+            'MERGE (character:Character {name: $name}) \
            WITH character \
            MATCH (film:Film) \
            WHERE film.title = $title \
            CREATE (character)-[r:APPEARED_IN {numberOfScenes: $scenes}]->(film)',
-          {
-            name: character.name,
-            scenes: character.value,
-            title: filmTitle,
-          },
-      );
-    } catch (error) {
-      console.error(error);
-      process.exit(1);
-    }
-  });
+            {
+              name: character.name,
+              scenes: character.value,
+              title: filmTitle,
+            },
+        );
+      } catch (error) {
+        console.error(error);
+        process.exit(1);
+      }
+    });
 
-  char.links.forEach(async (link) => {
-    const sourceChar = char.nodes[link.source].name;
-    const targetChar = char.nodes[link.target].name;
+    char.links.forEach(async (link) => {
+      const sourceChar = char.nodes[link.source].name;
+      const targetChar = char.nodes[link.target].name;
 
-    try {
-      await tx.run(
-          'MATCH (source:Character), (target:Character) \
+      try {
+        await tx.run(
+            'MATCH (source:Character), (target:Character) \
            WHERE source.name = $sourceName AND target.name = $targetName \
            CREATE (source)-[r:SPEAK_WITHIN_IN_THE_SAME_SCENE {times: $times, film: $film}]->(target)',
-          {
-            sourceName: sourceChar,
-            targetName: targetChar,
-            times: link.value,
-            film: filmTitle,
-          },
-      );
-    } catch (error) {
-      console.error(error);
-      process.exit(1);
-    }
-  });
+            {
+              sourceName: sourceChar,
+              targetName: targetChar,
+              times: link.value,
+              film: filmTitle,
+            },
+        );
+      } catch (error) {
+        console.error(error);
+        process.exit(1);
+      }
+    });
 
-  mentions.links.forEach(async (link) => {
-    const sourceChar = mentions.nodes[link.source].name;
-    const targetChar = mentions.nodes[link.target].name;
+    mentions.links.forEach(async (link) => {
+      const sourceChar = mentions.nodes[link.source].name;
+      const targetChar = mentions.nodes[link.target].name;
 
-    try {
-      await tx.run(
-          'MATCH (source:Character), (target:Character) \
+      try {
+        await tx.run(
+            'MATCH (source:Character), (target:Character) \
            WHERE source.name = $sourceName AND target.name = $targetName \
            CREATE (source)-[r:MENTIONED_WITHIN_IN_THE_SAME_SCENE {times: $times, film: $film}]->(target)',
-          {
-            sourceName: sourceChar,
-            targetName: targetChar,
-            times: link.value,
-            film: filmTitle,
-          },
-      );
-    } catch (error) {
-      console.error(error);
-      process.exit(1);
-    }
+            {
+              sourceName: sourceChar,
+              targetName: targetChar,
+              times: link.value,
+              film: filmTitle,
+            },
+        );
+      } catch (error) {
+        console.error(error);
+        process.exit(1);
+      }
+    });
   });
-});
 
-(async () => {
-  const result = await tx.run(
-      'MATCH (character:Character) \
+  (async () => {
+    const result = await tx.run(
+        'MATCH (character:Character) \
        RETURN character',
-  );
-  const characterList = result.records.map((record) => record.get('character').properties);
+    );
+    const characterList = result.records.map((record) => record.get('character').properties);
 
-  const promises = characterList.map(async (character) => {
-    let characterProps;
+    const promises = characterList.map(async (character) => {
+      let characterProps;
 
-    try {
-      const responseProps = await axios.get('https://swapi.dev/api/people/?search=' + character.name);
+      try {
+        const responseProps = await axios.get('https://swapi.dev/api/people/?search=' + character.name);
 
-      characterProps = responseProps.data.results[0];
+        characterProps = responseProps.data.results[0];
 
-      delete characterProps.homeworld;
-      delete characterProps.films;
-      delete characterProps.species;
-      delete characterProps.vehicles;
-      delete characterProps.starships;
-      delete characterProps.created;
-      delete characterProps.edited;
-      delete characterProps.url;
-    } catch (error) {
-      console.log('Some info not found for character ' + character.name);
-    }
-    try {
-      const html = await axios.get('https://en.wikipedia.org/wiki/' + (characterProps != undefined ? characterProps.name : character.name));
-      const $ = cheerio.load(html.data);
-
-      const image = $('.infobox-image')
-          .find('img')
-          .attr('src');
-
-      if (image == undefined) {
-        throw new Error('No image');
+        delete characterProps.homeworld;
+        delete characterProps.films;
+        delete characterProps.species;
+        delete characterProps.vehicles;
+        delete characterProps.starships;
+        delete characterProps.created;
+        delete characterProps.edited;
+        delete characterProps.url;
+      } catch (error) {
+        console.log('Some info not found for character ' + character.name);
       }
+      try {
+        const html = await axios.get('https://en.wikipedia.org/wiki/' + (characterProps != undefined ? characterProps.name : character.name));
+        const $ = cheerio.load(html.data);
 
-      if (characterProps == undefined) {
-        characterProps = {};
+        const image = $('.infobox-image')
+            .find('img')
+            .attr('src');
+
+        if (image == undefined) {
+          throw new Error('No image');
+        }
+
+        if (characterProps == undefined) {
+          characterProps = {};
+        }
+
+        characterProps.image = image;
+      } catch (error) {
+        console.log('Cannot find image for character: ' + ((characterProps != undefined && characterProps.name != undefined) ? characterProps.name : character.name));
       }
-
-      characterProps.image = image;
-    } catch (error) {
-      console.log('Cannot find image for character: ' + ((characterProps != undefined && characterProps.name != undefined) ? characterProps.name : character.name));
-    }
-    if (characterProps != undefined) {
-      return tx.run(
-          'MATCH (character:Character {name: $name}) \
+      if (characterProps != undefined) {
+        return tx.run(
+            'MATCH (character:Character {name: $name}) \
            SET character = $props',
-          {
-            name: character.name,
-            props: characterProps,
-          },
-      );
-    }
-  });
+            {
+              name: character.name,
+              props: characterProps,
+            },
+        );
+      }
+    });
 
-  await Promise.all(promises);
-  await tx.commit();
-  await session.close();
+    await Promise.all(promises);
+    await tx.commit();
+    await session.close();
+  })();
 })()
     .then(() => {
       console.log('Database populated');
