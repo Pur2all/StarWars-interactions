@@ -132,9 +132,12 @@ dataset.forEach((element) => {
   const characterList = result.records.map((record) => record.get('character').properties);
 
   const promises = characterList.map(async (character) => {
+    let characterProps;
+
     try {
       const responseProps = await axios.get('https://swapi.dev/api/people/?search=' + character.name);
-      const characterProps = responseProps.data.results[0];
+
+      characterProps = responseProps.data.results[0];
 
       delete characterProps.homeworld;
       delete characterProps.films;
@@ -144,18 +147,25 @@ dataset.forEach((element) => {
       delete characterProps.created;
       delete characterProps.edited;
       delete characterProps.url;
-
-      const html = await axios.get('https://en.wikipedia.org/wiki/' + characterProps.name);
+    } catch (error) {
+      console.log('Some info not found for character ' + character.name);
+    }
+    try {
+      const html = await axios.get('https://en.wikipedia.org/wiki/' + (characterProps != undefined ? characterProps.name : character.name));
       const $ = cheerio.load(html.data);
 
       const image = $('.infobox-image')
           .find('img')
           .attr('src');
 
+      if (characterProps == undefined) {
+        characterProps = {};
+      };
       characterProps.image = image;
     } catch (error) {
-      console.log('Some info not found for character ' + character.name);
-    } finally {
+      console.log('Cannot find image for character: ' + ((characterProps != undefined && characterProps.name != undefined) ? characterProps.name : character.name));
+    }
+    if (characterProps != undefined) {
       return tx.run(
           'MATCH (character:Character {name: $name}) \
            SET character = $props',
