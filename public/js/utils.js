@@ -53,3 +53,17 @@ function nextPage()
   {
 
   }
+
+  function ajaxCall(path)
+  {
+    resultData = "";
+    $.ajax({
+        url: path,
+        success: function (result) 
+        {
+          resultData=result;
+        },
+        async: false
+    });
+    return resultData;
+  }

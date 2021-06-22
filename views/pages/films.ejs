@@ -3,7 +3,6 @@
 <head>
     <%- include('./headLib.ejs') %>
     <link href="/css/films.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/js/utils.js"></script>
     <title>Lista film</title>
 </head>
@@ -22,9 +21,7 @@
         <% } %>  
         <div class="col-sm-3">
           <div class="card" style="background-color: #212529ab!important;">
-            <div class="form-check" style="margin-left: 10px;margin-top: 10px;">
-              <input class="form-check-input" type="checkbox" value="" id="check<%=i%>">
-            </div>
+              <input class="p-2 mx-3 mt-3 form-check-input" type="checkbox" value="" id="<%= films[i]['title'] %>">
             <% if(films[i]['imgLink'] != null) {%>
               <span><img src="<%= films[i]['imgLink'] %>" style="max-width: 200px;max-height: 250px;margin-top:20px" class="img-thumbnail" alt="img_not_found"></span>
             <% } 
@@ -44,40 +41,76 @@
         </div>
         <% } %>  
       <% } %>
-    </main>
-    <div class="container-fluid mx-auto">
       <div class="row d-flex justify-content-center" style="margin-bottom: 20px;">
         <div class="col-sm-9">
           <div class="card" style="background-color: #212529ab!important;">
             <div class="card-body">
               <h5 class="card-title justify-content-center">Cerca personaggi menzionati nei film selezionati</h5>
-              <button type="button" onclick="" class="btn btn-warning">Cerca personaggi menzionati</button>
-              <button type="button" onclick="" class="btn btn-warning">Cerca personaggi che appaiono</button>
+              <button type="button" onclick="searchMenzionati()" class="btn btn-warning">Cerca personaggi menzionati</button>
+              <button type="button" onclick="searchAppaiono()" class="btn btn-warning">Cerca personaggi che appaiono</button>
             </div>
           </div>
         </div>    
-      </div>  
-    </div>
-
+      </div> 
+      <div class="row d-flex justify-content-center" style="margin-bottom: 20px;">
+        <div class="col-sm-9">
+          <div class="card" style="background-color: #212529ab!important;">
+            <div class="card-body">
+              <h5 class="card-title justify-content-center"> Personaggi menzionati nei film selezionati: </h5>
+              <ul id="spawnCharInter" class="list-group list-unstyled list-group-flush">
+              </ul>
+            </div>
+          </div>
+        </div>    
+      </div> 
+      <div class="row d-flex justify-content-center" style="margin-bottom: 20px;">
+        <div class="col-sm-9">
+          <div class="card" style="background-color: #212529ab!important;">
+            <div class="card-body">
+              <h5 class="card-title justify-content-center">  Personaggi che appaiono nei film selezionati: </h5>
+              <ul id="spawnCharInter2" class="list-group list-unstyled list-group-flush">
+              </ul>
+            </div>
+          </div>
+        </div>    
+      </div> 
+    </main>
     <%- include('./footer.ejs') %>
   </div>
 </body>
 <script> 
   var films = JSON.parse(htmlDecode("<%= JSON.stringify(films) %>"));
-  console.log('/film/mentioned/<%=films[0]["title"]%>');
-  function ajaxCall(path)
+  function searchMenzionati()
   {
-    resultData = "";
-    $.ajax({
-        url: path,
-        success: function (result) 
-        {
-          resultData=result;
-        },
-        async: false
-    });
-    return resultData;
+    selectedValues = $('.form-check-input:checkbox:checked');
+    if(selectedValues.length > 0)
+    {
+      let stringaDaPassare = "";
+      selectedValues.each(element => stringaDaPassare+= selectedValues[element]['id']+",");
+      stringaDaPassare = stringaDaPassare.substr(0,stringaDaPassare.length-1);
+      const personaggiMenzionati = ajaxCall('/film/mentioned/'+stringaDaPassare);
+      stringaDaAppendere = "";
+      personaggiMenzionati.characters.forEach(element => stringaDaAppendere+='<li><a href="/character/'+element['name']+'">'+element['name']+'</a></li>');
+        $('#spawnCharInter').empty();
+        $('#spawnCharInter').append(stringaDaAppendere);
+      console.log(stringaDaAppendere);
+    }
   }
-  console.log(ajaxCall('/film/mentioned/<%=films[0]["title"]%>'));
+  function searchAppaiono()
+  {
+    selectedValues = $('.form-check-input:checkbox:checked');
+    if(selectedValues.length > 0)
+    {
+      let stringaDaPassare = "";
+      selectedValues.each(element => stringaDaPassare+= selectedValues[element]['id']+",");
+      stringaDaPassare = stringaDaPassare.substr(0,stringaDaPassare.length-1);
+      const personaggiMenzionati = ajaxCall('/film/appeared/'+stringaDaPassare);
+      stringaDaAppendere = "";
+      personaggiMenzionati.characters.forEach(element => stringaDaAppendere+='<li><a href="/character/'+element['name']+'">'+element['name']+'</a></li>');
+        $('#spawnCharInter2').empty();
+        $('#spawnCharInter2').append(stringaDaAppendere);
+      console.log(stringaDaAppendere);
+    }
+  }
 </script>
 </html>

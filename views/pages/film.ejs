@@ -3,6 +3,7 @@
 <head>
     <%- include('./headLib.ejs') %>
     <link href="/css/films.css" rel="stylesheet">
+    <script src="/js/utils.js"></script>
     <title><%= film['title']%></title>
 </head>
 <body class="d-flex h-100 text-center text-white bg-dark"> 
@@ -30,42 +31,48 @@
             <div class="col-md-6" style="margin-top:30px">
               <div class="card-body">
                 <h5 class="card-title"><%= film['title']%></h5>
-                <!--<p class="card-text">Con la partecipazione di uno scemo chiamato Lorenzo</p>-->
+                <p class="card-text">Anno: <%= film['year']['low']%></p>
               </div>
             </div>
-            <!--<div class="col-md-12">
-              <div class="row p-3">
-                <div class="col-md-6">
-                  <div class="">
-                    Personaggi menzionati nel film: 
-                  </div>
-                  <br>
-                  <ul class="list-group list-unstyled list-group-flush">
-                    <li>Mario baldi</li>
-                    <li>Bocconcino</li>
-                    <li>Lorenzo carpentieri</li>
-                  </ul>
-                </div>
-                <div class="col-md-6">
-                  <div class="">
-                    Personaggi che appaiono nel film: 
-                  </div>
-                  <br>
-                  <ul class="list-group list-unstyled list-group-flush">
-                    <li>Mario baldi</li>
-                    <li>Bocconcino</li>
-                    <li>Lorenzo carpentieri</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>-->
         </div>
-
+        <select id="selectbellixima" class="form-select" multiple aria-label="multiple select example">
+        </select>
+        <button type="button" onclick="search()" class="btn btn-warning">Cerca interazioni personaggi</button>
+        <div class="col-md-12">
+          <div class="row p-3">
+            <div class="col-md-6">
+              <div class="">
+              Interazioni con personaggio selezionato: 
+              </div>
+              <br>
+              <ul id="spawnCharInter" class="list-group list-unstyled list-group-flush">
+              </ul>
+            </div>
+          </div>
+        </div>
     </main>
   
     <%- include('./footer.ejs') %>
   </div>
- 
+  <script>
+    function search()
+    {
+      selectedValues = $('#selectbellixima').val();
+      const selectedValuesString = selectedValues.toString();
+      if(selectedValuesString)
+      {
+        const personaggiInterazioni = ajaxCall('/character/interactions/'+selectedValuesString+'/<%=film["title"]%>');
+        let stringaDaAppendere = "";
+        personaggiInterazioni.interactions.forEach(element => stringaDaAppendere+='<li><a href="/character/'+element[2]['name']+'">'+element[2]['name']+'</a></li>');
+        $('#spawnCharInter').empty();
+        $('#spawnCharInter').append(stringaDaAppendere);
+      }
+    }
+    var films = JSON.parse(htmlDecode("<%= JSON.stringify(film) %>"));
+    const personaggi = ajaxCall('/film/appeared/<%=film["title"]%>');
+    let stringaDaAppendereAlChiodo = "";
+    personaggi.characters.forEach(element => stringaDaAppendereAlChiodo+='<option value='+'"'+element['name']+'"'+'>'+element['name']+'</option>');
+    $('#selectbellixima').append(stringaDaAppendereAlChiodo);
+  </script>
 </body>
 </html>
