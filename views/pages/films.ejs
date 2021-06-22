@@ -25,7 +25,7 @@
             <div class="card-body">
               <h5 class="card-title text-truncate" style="max-width: 400px;"><%= films[i]['title'] %></h5>
               <!--<p class="card-text text-truncate" style="max-width: 400px;">Con la partecipazione di uno scemo chiamato Lorenzo</p>!-->
-              <a href="/film?name=example" class="btn btn-warning">Vedi scheda film</a>
+              <a href='/film/<%= films[i]["title"] %>' class="btn btn-warning">Vedi scheda film</a>
             </div>
           </div>
         </div>

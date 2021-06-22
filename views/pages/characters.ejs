@@ -24,7 +24,7 @@
             <span><i class="fas fa-male fa-10x p-2"></i></span>
             <div class="card-body">
               <h5 class="card-title text-truncate" style="max-width: 400px;"><%= characters[i]['name'] %></h5>
-              <a href="/personaggio?name=example" class="btn btn-warning">Vedi scheda personaggio</a>
+              <a href="/character/<%= characters[i]['name'] %>" class="btn btn-warning">Vedi scheda personaggio</a>
             </div>
           </div>
         </div>
@@ -44,6 +44,7 @@
 </body>
 <script> 
   var characters = JSON.parse(htmlDecode("<%= JSON.stringify(characters) %>"));
+  console.log(characters);
   spawnPagination(characters.length)
 </script>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <%- include('./headLib.ejs') %>
     <link href="/css/films.css" rel="stylesheet">
-    <title>Mario baldi e il ritorno di bocconcino</title>
+    <title><%= character['name'] %></title>
 </head>
 <body class="d-flex h-100 text-center text-white bg-dark"> 
   <div class="container-fluid d-flex p-0 w-100 h-100 mx-0 flex-column">
@@ -22,7 +22,7 @@
             </div>
             <div class="col-md-6" style="margin-top:30px">
               <div class="card-body">
-                <h5 class="card-title">Lorenzo Carpentieri</h5>
+                <h5 class="card-title"><%= character['name'] %></h5>
                 <p class="card-text">Un ragazzo veramente scemo</p>
               </div>
             </div>
