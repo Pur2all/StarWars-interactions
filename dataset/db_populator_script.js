@@ -158,9 +158,14 @@ dataset.forEach((element) => {
           .find('img')
           .attr('src');
 
+      if (image == undefined) {
+        throw new Error('No image');
+      }
+
       if (characterProps == undefined) {
         characterProps = {};
-      };
+      }
+
       characterProps.image = image;
     } catch (error) {
       console.log('Cannot find image for character: ' + ((characterProps != undefined && characterProps.name != undefined) ? characterProps.name : character.name));
