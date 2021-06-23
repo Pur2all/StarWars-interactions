@@ -64,8 +64,15 @@ const commonKnownCharacters = (req, res) => {
 const shortestPath = (req, res) => {
   Character.shortestPath(req.params.fromName, req.params.toName)
       .then((result) => {
+        const path = [];
+
+        for (let i = 0; i < result.length; i++) {
+          path.push(result[i].start.properties.name);
+          path.push(result[i].end.properties.name);
+        }
+
         res.status(OK_STATUS)
-            .send({path: result});
+            .send({path: path});
       });
 };
 
@@ -78,7 +85,7 @@ const findAll = (req, res) => {
 };
 
 const search = (req, res) => {
-  Film.search(req.params.characterName)
+  Character.search(req.params.characterName)
       .then((result) => {
         res.status(OK_STATUS)
             .send({characters: result});

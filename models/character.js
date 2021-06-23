@@ -218,11 +218,8 @@ class Character {
 
     return session.run(
         'MATCH (characters:Character) \
-         WHERE characters.name =~ \'(?i).*$name.*\' \
+         WHERE characters.name =~ "(?i).*' + characterName + '.*" \
          RETURN characters',
-        {
-          name: characterName,
-        },
     )
         .then((result) => {
           session.close();
