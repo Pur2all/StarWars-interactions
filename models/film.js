@@ -93,7 +93,7 @@ class Film {
         .then((result) => {
           session.close();
 
-          return result.records.map((record) => record.get('film').properties);
+          return result.records.map((record) => record.get('r.film'));
         });
   }
 
@@ -116,7 +116,7 @@ class Film {
         .then((result) => {
           session.close();
 
-          return result.records.map((record) => record.get('film').properties);
+          return result.records.map((record) => record.get('f').properties);
         });
   }
 
