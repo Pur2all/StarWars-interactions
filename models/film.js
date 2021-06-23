@@ -83,9 +83,11 @@ class Film {
     return session.run(
         'MATCH (c:Character)-[r:MENTIONED_WITHIN_IN_THE_SAME_SCENE]-() \
          WHERE c.name = $name \
-         RETURN r.film \
+         WITH r.film AS filmTitle \
          ORDER BY r.film \
-         LIMIT 1',
+         LIMIT 1 \
+         MATCH (f:Film {title: filmTitle}) \
+         RETURN f',
         {
           name: characterName,
         },
@@ -93,7 +95,7 @@ class Film {
         .then((result) => {
           session.close();
 
-          return result.records.map((record) => record.get('r.film'));
+          return result.records.map((record) => record.get('f').properties);
         });
   }
 

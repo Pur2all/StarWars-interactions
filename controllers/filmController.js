@@ -38,7 +38,6 @@ const firstAppearanceOfCharacterOrderByPub = (req, res) => {
 const firstMentionOfCharacterOrderByHistory = (req, res) => {
   Film.firstMentionHistory(req.params.characterName)
       .then((result) => {
-        console.log(result);
         res.status(OK_STATUS)
             .send({film: result});
       });

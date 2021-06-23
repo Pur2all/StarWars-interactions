@@ -35,7 +35,7 @@ class Character {
     const session = driver.session();
 
     return session.run('MATCH (character:Character {name: $name})-[r:APPEARED_IN]->(film:Film)' +
-                           'RETURN film',
+                       'RETURN film',
     {
       name: characterName,
     },
@@ -64,8 +64,8 @@ class Character {
     const session = driver.session();
 
     return session.run('MATCH (character:Character)-[r:SPEAK_WITHIN_IN_THE_SAME_SCENE{film:$film}]-(c) ' +
-                    'WHERE character.name in $characters ' +
-                    'RETURN character, r, c',
+                       'WHERE character.name in $characters ' +
+                       'RETURN character, r, c',
     {
       characters: characterNames,
       film: filmName,
@@ -102,8 +102,9 @@ class Character {
     const session = driver.session();
 
     return session.run('MATCH (c1:Character)-[r:SPEAK_WITHIN_IN_THE_SAME_SCENE]-(c2:Character) ' +
-                    'WHERE c1.name = $name1 AND c2.name = $name2 ' +
-                    'RETURN c1, collect(r.film), c2, sum(r.times)', {
+                       'WHERE c1.name = $name1 AND c2.name = $name2 ' +
+                       'RETURN c1, collect(r.film), c2, sum(r.times)',
+    {
       name1: characterName1,
       name2: characterName2,
     })

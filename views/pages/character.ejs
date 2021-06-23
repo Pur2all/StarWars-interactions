@@ -200,9 +200,9 @@
    let stringaFilmMenzioneInOrdineDiStoriaDelFilm = '<div class="row justify-content-center">';
     filmMenzioneInOrdineDiStoriaDelFilm.film.forEach(element => {
     if(element["imgLink"] != null)
-    stringaFilmMenzioneInOrdineDiStoriaDelFilm+='<div class="col-sm-6"><div class="card" style="border:none;background:none;"><div class="card-body"><div class="card-text"><span><img src='+'"'+element["imgLink"]+'" style="max-width: 150px;max-height: 150px;margin-top:20px" class="img-thumbnail" alt="img_not_found"></span></div><h5 class="card-title"><a href="/film/'+element+'">'+element+'</a></div></div></div>'
+    stringaFilmMenzioneInOrdineDiStoriaDelFilm+='<div class="col-sm-6"><div class="card" style="border:none;background:none;"><div class="card-body"><div class="card-text"><span><img src='+'"'+element["imgLink"]+'" style="max-width: 150px;max-height: 150px;margin-top:20px" class="img-thumbnail" alt="img_not_found"></span></div><h5 class="card-title"><a href="/film/'+element['title']+'">'+element['title']+'</a></div></div></div>'
     else
-    stringaFilmMenzioneInOrdineDiStoriaDelFilm+='<div class="col-sm-6"><div class="card" style="border:none;background:none;><div class="card-body"><div class="card-text"><span><i class="fas fa-film fa-10x p-2"></i></span></div><h5 class="card-title"><a href="/film/'+element+'">'+element+'</a></div></div></div>'
+    stringaFilmMenzioneInOrdineDiStoriaDelFilm+='<div class="col-sm-6"><div class="card" style="border:none;background:none;><div class="card-body"><div class="card-text"><span><i class="fas fa-film fa-10x p-2"></i></span></div><h5 class="card-title"><a href="/film/'+element['title']+'">'+element['title']+'</a></div></div></div>'
     });
     stringaFilmMenzioneInOrdineDiStoriaDelFilm+='</div>';
    $('#filmMenzioneInOrdineDiStoriaDelFilm').empty();
