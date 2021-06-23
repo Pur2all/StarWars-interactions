@@ -3,6 +3,7 @@
 <head>
     <%- include('./headLib.ejs') %>
     <link href="/css/films.css" rel="stylesheet">
+    <script src="/js/utils.js"></script>
     <title><%= character['name'] %></title>
 </head>
 <body class="d-flex h-100 text-center text-white bg-dark"> 
@@ -17,7 +18,7 @@
       <div class="row d-flex justify-content-center" style="margin-bottom: 20px;">
         <div class="card mb-3" style="max-width: 1040px;background-color: #212529ab!important;">
           <div class="row g-0">
-            <div class="col-md-6">
+            <div class="col-md-6" style="margin-top:30px">
               <% if(character['image'] != null) {%>
                 <span><img src="<%= character['image'] %>" style="width: 70%;height: 200px;background-size: cover;" class="img-thumbnail" alt="img_not_found"></span>
               <% } 
@@ -30,7 +31,24 @@
             <div class="col-md-6" style="margin-top:30px">
               <div class="card-body">
                 <h5 class="card-title"><%= character['name'] %></h5>
-                <p class="card-text">Un ragazzo veramente scemo</p>
+                <% if(character['birth_year'] != null) {%>
+                <p class="card-text">Nato il: <%= character['birth_year'] %></p>
+                <% } %>
+                <% if(character['eye_color'] != null) {%>
+                  <p class="card-text">Colore occhi: <%= character['eye_color'] %></p>
+                <% } %>
+                <% if(character['gender'] != null) {%>
+                  <p class="card-text">Genere: <%= character['gender'] %></p>
+                <% } %>
+                <% if(character['hair_color'] != null) {%>
+                  <p class="card-text">Colore capelli: <%= character['hair_color'] %></p>
+                <% } %>
+                <% if(character['height'] != null) {%>
+                  <p class="card-text">Altezza: <%= character['height'] %> cm</p>
+                <% } %>
+                <% if(character['mass'] != null) {%>
+                  <p class="card-text">Peso: <%= character['mass'] %> kg</p>
+                <% } %>
               </div>
             </div>
             <div class="col-md-12">
@@ -39,23 +57,13 @@
                   <div class="">
                    Film in cui appare: 
                   </div>
-                  <br>
-                  <ul class="list-group list-unstyled list-group-flush">
-                    <li>Mario baldi e il ritorno di bocconcino</li>
-                    <li>Mario baldi lo scontro finale</li>
-                    <li>Bocconcino vs Ciccio Migliaro</li>
-                    <li>Lodo uccide Lorenzo (Finalmente)</li>
-                  </ul>
+                  <div id="filmInCuiAppare"></div>
                 </div>
                 <div class="col-md-6">
                   <div class="">
-                    Prima apparizione in ordine di storia: 
+                   Prima apparizione in ordine di storia: 
                   </div>
-                  <br>
-                  <ul class="list-group list-unstyled list-group-flush">
-                    <li>Mario baldi e il ritorno di bocconcino</li>
-                    <li>Mario baldi lo scontro finale</li>
-                  </ul>
+                  <div id="filmInCuiAppareInOrdineDiStoria"></div>
                 </div>
               </div>
             </div>
@@ -63,25 +71,27 @@
               <div class="row p-3">
                 <div class="col-md-6">
                   <div class="">
-                   Prima menzione in ordine di storia: 
+                    Prima apparizione in ordine di uscita dei film: 
                   </div>
-                  <br>
-                  <ul class="list-group list-unstyled list-group-flush">
-                    <li>Mario baldi e il ritorno di bocconcino</li>
-                    <li>Mario baldi lo scontro finale</li>
-                    <li>Bocconcino vs Ciccio Migliaro</li>
-                    <li>Lodo uccide Lorenzo (Finalmente)</li>
-                  </ul>
+                  <div id="filmInCuiAppareInOrdineDiUscitaDelFilm"></div>
                 </div>
+
                 <div class="col-md-6">
                   <div class="">
-                    Prima menzione in ordine di uscita: 
+                    Prima menzione in ordine di storia dei film: 
                   </div>
-                  <br>
-                  <ul class="list-group list-unstyled list-group-flush">
-                    <li>Mario baldi e il ritorno di bocconcino</li>
-                    <li>Mario baldi lo scontro finale</li>
-                  </ul>
+                  <div id="filmMenzioneInOrdineDiStoriaDelFilm"></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div id=filmInCuiAppare class="">
+                  Personaggi che non conosce: 
+                </div>
+                <br>
+                <ul class="list-group list-unstyled list-group-flush">
+                  <li>Mario baldi e il ritorno di bocconcino</li>
+                  <li>Mario baldi lo scontro finale</li>
+                </ul>
                 </div>
               </div>
             </div>
@@ -93,6 +103,65 @@
   
     <%- include('./footer.ejs') %>
   </div>
- 
+ <script>
+   var character = JSON.parse(htmlDecode("<%= JSON.stringify(character) %>"));
+   //FILM IN CUI APPARE
+   const filmInCuiAppare = ajaxCall('/character/films/<%=character["name"]%>');
+   let stringaFilmInCuiAppare = '<div class="row">';
+   filmInCuiAppare.films.forEach(element => {
+    if(element["imgLink"] != null)
+     stringaFilmInCuiAppare+='<div class="col-sm-6"><div class="card" style="border:none;background:none;"><div class="card-body"><div class="card-text"><span><img src='+'"'+element["imgLink"]+'" style="max-width: 150px;max-height: 150px;margin-top:20px" class="img-thumbnail" alt="img_not_found"></span></div><h5 class="card-title"><a href="/film/'+element['title']+'">'+element['title']+'</a></div></div></div>'
+    else
+     stringaFilmInCuiAppare+='<div class="col-sm-6"><div class="card" style="border:none;background:none;><div class="card-body"><div class="card-text"><span><i class="fas fa-male fa-10x p-2"></i></span></div><h5 class="card-title"><a href="/film/'+element['title']+'">'+element['title']+'</a></div></div></div>'
+    });
+   stringaFilmInCuiAppare+='</div>';
+   $('#filmInCuiAppare').empty();
+   $('#filmInCuiAppare').append(stringaFilmInCuiAppare);
+
+   //PRIMA APPARIZIONE IN ORDINE DI STORIA 
+   const filmInCuiAppareInOrdineDiStoria = ajaxCall('/film/appeared/firstTimeStory/<%=character["name"]%>');
+   let stringaFilmInCuiAppareInOrdineDiStoria = '<div class="row justify-content-center">';
+   filmInCuiAppareInOrdineDiStoria.film.forEach(element => {
+    if(element["imgLink"] != null)
+    stringaFilmInCuiAppareInOrdineDiStoria+='<div class="col-sm-6"><div class="card" style="border:none;background:none;"><div class="card-body"><div class="card-text"><span><img src='+'"'+element["imgLink"]+'" style="max-width: 150px;max-height: 150px;margin-top:20px" class="img-thumbnail" alt="img_not_found"></span></div><h5 class="card-title"><a href="/film/'+element['title']+'">'+element['title']+'</a></div></div></div>'
+    else
+    stringaFilmInCuiAppareInOrdineDiStoria+='<div class="col-sm-6"><div class="card" style="border:none;background:none;><div class="card-body"><div class="card-text"><span><i class="fas fa-male fa-10x p-2"></i></span></div><h5 class="card-title"><a href="/film/'+element['title']+'">'+element['title']+'</a></div></div></div>'
+    });
+    stringaFilmInCuiAppareInOrdineDiStoria+='</div>';
+   $('#filmInCuiAppareInOrdineDiStoria').empty();
+   $('#filmInCuiAppareInOrdineDiStoria').append(stringaFilmInCuiAppareInOrdineDiStoria);
+
+   //PRIMA APPARIZIONE IN ORDINE DI USCITA DEI FILM
+   const filmInCuiAppareInOrdineDiUscitaDelFilm = ajaxCall('/film/appeared/firstTimeFilmPub/<%=character["name"]%>');
+   let stringaFilmInCuiAppareInOrdineDiUscitaDelFilm = '<div class="row justify-content-center">';
+    filmInCuiAppareInOrdineDiUscitaDelFilm.film.forEach(element => {
+    if(element["imgLink"] != null)
+    stringaFilmInCuiAppareInOrdineDiUscitaDelFilm+='<div class="col-sm-6"><div class="card" style="border:none;background:none;"><div class="card-body"><div class="card-text"><span><img src='+'"'+element["imgLink"]+'" style="max-width: 150px;max-height: 150px;margin-top:20px" class="img-thumbnail" alt="img_not_found"></span></div><h5 class="card-title"><a href="/film/'+element['title']+'">'+element['title']+'</a></div></div></div>'
+    else
+    stringaFilmInCuiAppareInOrdineDiUscitaDelFilm+='<div class="col-sm-6"><div class="card" style="border:none;background:none;><div class="card-body"><div class="card-text"><span><i class="fas fa-male fa-10x p-2"></i></span></div><h5 class="card-title"><a href="/film/'+element['title']+'">'+element['title']+'</a></div></div></div>'
+    });
+    stringaFilmInCuiAppareInOrdineDiUscitaDelFilm+='</div>';
+   $('#filmInCuiAppareInOrdineDiUscitaDelFilm').empty();
+   $('#filmInCuiAppareInOrdineDiUscitaDelFilm').append(stringaFilmInCuiAppareInOrdineDiUscitaDelFilm);
+
+   //PRIMA MENZIONE IN ORDINE DI STORIA DEI FILM
+   /*const filmMenzioneInOrdineDiStoriaDelFilm = ajaxCall('/film/mentioned/firstTimeStory/<%=character["name"]%>');
+   let stringaFilmMenzioneInOrdineDiStoriaDelFilm = '<div class="row justify-content-center">';
+    filmMenzioneInOrdineDiStoriaDelFilm.film.forEach(element => {
+    if(element["imgLink"] != null)
+    stringaFilmMenzioneInOrdineDiStoriaDelFilm+='<div class="col-sm-6"><div class="card" style="border:none;background:none;"><div class="card-body"><div class="card-text"><span><img src='+'"'+element["imgLink"]+'" style="max-width: 150px;max-height: 150px;margin-top:20px" class="img-thumbnail" alt="img_not_found"></span></div><h5 class="card-title"><a href="/film/'+element['title']+'">'+element['title']+'</a></div></div></div>'
+    else
+    stringaFilmMenzioneInOrdineDiStoriaDelFilm+='<div class="col-sm-6"><div class="card" style="bordcer:none;background:none;><div class="card-body"><div class="card-text"><span><i class="fas fa-male fa-10x p-2"></i></span></div><h5 class="card-title"><a href="/film/'+element['title']+'">'+element['title']+'</a></div></div></div>'
+    });
+    stringaFilmMenzioneInOrdineDiStoriaDelFilm+='</div>';
+   $('#filmMenzioneInOrdineDiStoriaDelFilm').empty();
+   $('#filmMenzioneInOrdineDiStoriaDelFilm').append(stringaFilmMenzioneInOrdineDiStoriaDelFilm);*/
+
+   //PRIMA MENZIONE IN ORDINE DI USCITA DEI FILM
+
+   //PERSONAGGI CHE NON CONOSCE
+
+   console.log(filmInCuiAppareInOrdineDiUscitaDelFilm);
+ </script>
 </body>
 </html>
