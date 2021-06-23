@@ -6,7 +6,7 @@
     <script src="/js/utils.js"></script>
     <title>Lista personaggi</title>
 </head>
-<body class="d-flex h-100 text-center text-white bg-dark"> 
+<body class="d-flex text-center text-white bg-dark"> 
   <div class="container-fluid d-flex p-0 w-100 h-100 mx-0 flex-column">
     <header class="mb-auto">
       <div class="container-fluid p-0">
@@ -14,8 +14,8 @@
       </div> 
     </header>
 
-    <main class="container-fluid mx-auto">
-      <% for(var i=0; i<6; i++) {%>
+    <main class="container-fluid mx-auto py-4">
+      <% for(var i=0; i<characters.length; i++) {%>
         <% if (i % 3 == 0) { %>
           <div class="row d-flex justify-content-center" style="margin-bottom: 20px;">
         <% } %>  
@@ -23,7 +23,7 @@
           <div class="card" style="background-color: #212529ab!important;">
             <div class="card-body">
               <% if(characters[i]['image'] != null) {%>
-                <span><img src="<%= characters[i]['image'] %>" style="width: 70%;height: 160px;background-size: cover;" class="img-thumbnail" alt="img_not_found"></span>
+                <span><img src="<%= characters[i]['image'] %>" style="width: 70%;height: 200px;background-size: cover;object-fit: cover;object-position: 50% 15%;" class="img-thumbnail" alt="img_not_found"></span>
               <% } 
                 else
                 { %>
@@ -50,7 +50,7 @@
  
 </body>
 <script> 
-  var length = JSON.parse(htmlDecode("<%= JSON.stringify(characters.length) %>"));
-  spawnPagination(length);
+  //var length = JSON.parse(htmlDecode("<%= JSON.stringify(characters.length) %>"));
+  //spawnPagination(length);
 </script>
 </html>

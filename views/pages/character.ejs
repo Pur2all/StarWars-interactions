@@ -20,7 +20,7 @@
           <div class="row g-0">
             <div class="col-md-6" style="margin-top:30px">
               <% if(character['image'] != null) {%>
-                <span><img src="<%= character['image'] %>" style="width: 70%;height: 200px;background-size: cover;" class="img-thumbnail" alt="img_not_found"></span>
+                <span><img src="<%= character['image'] %>" style="width: 70%;height: 200px;background-size: cover;object-fit: cover;object-position: 50% 15%;" class="img-thumbnail" alt="img_not_found"></span>
               <% } 
                 else
                 { %>
@@ -123,7 +123,7 @@
                   <select id="select1" class="form-select">
                   </select>
                   <button type="button" onclick="search()" style="width:100%;margin-top:10px" class="btn btn-warning">Cerca interazioni personaggi</button>
-                  <div class="">
+                  <div class="" style="margin-top:20px">
                     Ha interagito con il personaggio selezionato?:
                   </div>
                   <div id="interazioneConPersonaggio">
@@ -143,6 +143,34 @@
                 </div>
              </div>
            </div>  
+
+           <div class="col-md-12">
+            <div class="row p-3">
+              <div class="col-md-6">
+                <div class="">
+                  Seleziona personaggio:
+                </div>
+                <select id="select3" class="form-select">
+                </select>
+                <button type="button" onclick="search2()" style="width:100%;margin-top:10px" class="btn btn-warning">Cerca personaggi che conoscono:</button>
+                <div class="">
+                  Lista di personaggi che conoscono entrambi:
+                </div>
+                <ul id="listaDiPersonaggiCheConosconoEntrambi" class="list-group list-unstyled list-group-flush">
+                </ul>
+              </div>
+              <div class="col-md-6">
+                <div class="">
+                  Percorso minore per arrivare da un personaggio all'altro:
+                </div>
+                <select id="select4" class="form-select">
+                </select>
+                <button type="button" onclick="search3()" style="width:100%;margin-top:10px" class="btn btn-warning">Cerca cammino minimo:</button>
+                <ul id="percorsoMin" class="list-group list-unstyled list-group-flush">
+                </ul>
+              </div>
+           </div>
+         </div>  
 
           </div>
       </div>
@@ -227,24 +255,24 @@
     {
       if(count == 0)
       {
-        stringaPersonaggiCheNonConosce+='<div class="carousel-item active"><img class="d-block w-100" style="height:300px;object-position:top;background-repeat: no-repeat; overflow: hidden;object-fit: cover;" src='+'"'+element["image"]+'" alt="img_not_found"><div class="carousel-caption d-none d-md-block"><a href="/character/'+element['name']+'">'+element['name']+'</a></div></div>'
+        stringaPersonaggiCheNonConosce+='<div class="carousel-item active"><img class="d-block w-100" style="width: 70%;height: 300px;background-size: cover;object-fit: contain;object-position: 50% 15%;" src='+'"'+element["image"]+'" alt="img_not_found"><div class="carousel-caption d-none d-md-block"><a href="/character/'+element['name']+'">'+element['name']+'</a></div></div>'
         count+=1;
       }
       else
       {
-        stringaPersonaggiCheNonConosce+='<div class="carousel-item"><img class="d-block w-100" style="height:300px;object-position:top;background-repeat: no-repeat; overflow: hidden;object-fit: cover;" src='+'"'+element["image"]+'" alt="img_not_found"><div class="carousel-caption d-none d-md-block"><a href="/character/'+element['name']+'">'+element['name']+'</a></div></div>'
+        stringaPersonaggiCheNonConosce+='<div class="carousel-item"><img class="d-block w-100" style="width: 70%;height: 300px;background-size: cover;object-fit: contain;object-position: 50% 15%;" src='+'"'+element["image"]+'" alt="img_not_found"><div class="carousel-caption d-none d-md-block"><a href="/character/'+element['name']+'">'+element['name']+'</a></div></div>'
       }
     }
     else
     {
       if(count == 0)
       {
-        stringaPersonaggiCheNonConosce+='<div class="carousel-item active"><img class="d-block w-100" style="height:300px;object-position:center;background-repeat: no-repeat; overflow: hidden;object-fit: cover;" src="/img/default-image.jpg" alt="img_not_found"><div class="carousel-caption d-none d-md-block"><a href="/character/'+element['name']+'">'+element['name']+'</a></div></div>'
+        stringaPersonaggiCheNonConosce+='<div class="carousel-item active"><img class="d-block w-100" style="width: 70%;height: 300px;background-size: cover;object-fit: contain;object-position: 50% 15%;" src="/img/default-image.jpg" alt="img_not_found"><div class="carousel-caption d-none d-md-block"><a href="/character/'+element['name']+'">'+element['name']+'</a></div></div>'
         count+=1;
       }
       else
       {
-        stringaPersonaggiCheNonConosce+='<div class="carousel-item"><img class="d-block w-100" style="height:300px;object-position:center;background-repeat: no-repeat; overflow: hidden;object-fit: cover;" src="/img/default-image.jpg" alt="img_not_found"><div class="carousel-caption d-none d-md-block"><a href="/character/'+element['name']+'">'+element['name']+'</a></div></div>'
+        stringaPersonaggiCheNonConosce+='<div class="carousel-item"><img class="d-block w-100" style="width: 70%;height: 300px;background-size: cover;object-fit: contain;object-position: 50% 15%;" src="/img/default-image.jpg" alt="img_not_found"><div class="carousel-caption d-none d-md-block"><a href="/character/'+element['name']+'">'+element['name']+'</a></div></div>'
       }
     }
     });
@@ -257,6 +285,8 @@
    personaggi.characters.forEach(element => stringaDaAppendereAllaSelect+='<option value='+'"'+element['name']+'"'+'>'+element['name']+'</option>');
    $('#select1').append(stringaDaAppendereAllaSelect);
    $('#select2').append(stringaDaAppendereAllaSelect);
+   $('#select3').append(stringaDaAppendereAllaSelect);
+   $('#select4').append(stringaDaAppendereAllaSelect);
    function search()
    {
       selectedValues = $('#select1').val();
@@ -279,7 +309,7 @@
       {
         const personaggiInterazione = ajaxCall('/character/speak/<%= character["name"] %>/'+selectedValuesString);
         $('#interazioneConPersonaggio').empty();
-        if(personaggiInterazione)
+        if(personaggiInterazione.films.length > 0)
         {
           stringaDaAppendereAllaSelect = "<li>Film in cui compaiono:</li>";
           personaggiInterazione.films[0][0].forEach(element => stringaDaAppendereAllaSelect+='<li>'+element+'</li>');
@@ -291,6 +321,29 @@
         
       }
     }
+    function search2()
+    {
+      selectedValues = $('#select3').val();
+      const selectedValuesString = selectedValues.toString();
+      if(selectedValuesString)
+      {
+        const personaggiCheConoscono = ajaxCall('/character/commonKnown/<%= character["name"] %>/'+selectedValuesString);
+        console.log(personaggiCheConoscono)
+        $('#listaDiPersonaggiCheConosconoEntrambi').empty();
+        $('#listaDiPersonaggiCheConosconoEntrambi').append(stringaDaAppendereAllaSelect);       
+      }
+    }
+    function search3()
+    {
+      selectedValues = $('#select4').val();
+      const selectedValuesString = selectedValues.toString();
+      if(selectedValuesString)
+      {
+        const camminoMinimo = ajaxCall('/character/shortestPath/<%= character["name"] %>/'+selectedValuesString);
+        console.log(camminoMinimo)
+      }
+    }
+
  </script> 
 </body>
 </html>
