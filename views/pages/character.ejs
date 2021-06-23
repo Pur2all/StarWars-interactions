@@ -6,7 +6,7 @@
     <script src="/js/utils.js"></script>
     <title><%= character['name'] %></title>
 </head>
-<body class="d-flex h-100 text-center text-white bg-dark"> 
+<body class="d-flex text-center text-white bg-dark"> 
   <div class="container-fluid d-flex p-0 w-100 h-100 mx-0 flex-column">
     <header class="mb-auto">
       <div class="container-fluid p-0">
@@ -136,12 +136,9 @@
                   <select id="select2" class="form-select">
                   </select>
                   <button type="button" onclick="search1()" style="width:100%;margin-top:10px" class="btn btn-warning">Cerca interazioni personaggi</button>
-                  <div class="">
-                    Film in cui i due personaggi compaiono insieme e il numero di volte in cui compaiono insieme:
-                  </div>
-                  <div id="carouselExampleControls2" class="carousel slide" data-bs-ride="carousel">
-                    <div id="interazioneConPersonaggioCompaionoInsieme" class="carousel-inner">
-                    </div>
+                  <div id="carouselExampleControls2" class="carousel slide" data-bs-ride="carousel" style="margin-top:20px">
+                    <ul id="interazioneConPersonaggioCompaionoInsieme" class="list-group list-unstyled list-group-flush">
+                    </ul>
                   </div>
                 </div>
              </div>
@@ -264,7 +261,6 @@
    {
       selectedValues = $('#select1').val();
       const selectedValuesString = selectedValues.toString();
-      $('#carouselExampleControls1').css('display', 'none')
       if(selectedValuesString)
       {
         const personaggiInterazione = ajaxCall('/character/interacted/<%= character["name"] %>/'+selectedValuesString).isAppeared[0];
@@ -277,7 +273,23 @@
     }
     function search1()
     {
-      alert('la implemento cazzo')
+      selectedValues = $('#select2').val();
+      const selectedValuesString = selectedValues.toString();
+      if(selectedValuesString)
+      {
+        const personaggiInterazione = ajaxCall('/character/speak/<%= character["name"] %>/'+selectedValuesString);
+        $('#interazioneConPersonaggio').empty();
+        if(personaggiInterazione)
+        {
+          stringaDaAppendereAllaSelect = "<li>Film in cui compaiono:</li>";
+          personaggiInterazione.films[0][0].forEach(element => stringaDaAppendereAllaSelect+='<li>'+element+'</li>');
+          stringaDaAppendereAllaSelect += '<li style="margin-top:20px">Numero di volte in cui sono apparsi insieme:</li>';
+          stringaDaAppendereAllaSelect += '<li>'+personaggiInterazione.films[0][1]+'</li>';
+          $('#interazioneConPersonaggioCompaionoInsieme').empty();
+          $('#interazioneConPersonaggioCompaionoInsieme').append(stringaDaAppendereAllaSelect);       
+        }
+        
+      }
     }
  </script> 
 </body>

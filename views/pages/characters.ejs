@@ -50,7 +50,7 @@
  
 </body>
 <script> 
-  var characters = JSON.parse(htmlDecode("<%= JSON.stringify(characters) %>"));
-  spawnPagination(characters.length)
+  var length = JSON.parse(htmlDecode("<%= JSON.stringify(characters.length) %>"));
+  spawnPagination(length);
 </script>
 </html>
