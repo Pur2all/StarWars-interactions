@@ -53,6 +53,22 @@ const charactersNotKnown = (req, res) => {
       });
 };
 
+const commonKnownCharacters = (req, res) => {
+  Character.commonKnownCharacters(req.params.firstCharacterName, req.params.secondCharacterName)
+      .then((result) => {
+        res.status(OK_STATUS)
+            .send({characters: result});
+      });
+};
+
+const shortestPath = (req, res) => {
+  Character.shortestPath(req.params.fromName, req.params.toName)
+      .then((result) => {
+        res.status(OK_STATUS)
+            .send({path: result});
+      });
+};
+
 const findAll = (req, res) => {
   Character.findAll()
       .then((result) => {
@@ -76,6 +92,8 @@ export default {
   filmInWhichTwoCharacterSpeak,
   areAppearedToghether,
   charactersNotKnown,
+  commonKnownCharacters,
+  shortestPath,
   findAll,
   search,
 };

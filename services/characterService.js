@@ -39,6 +39,18 @@ export default (app) => {
   app.get('/character/notknows/:characterName', CharacterControl.charactersNotKnown);
 
   /*
+      Input: nome di due personaggi
+      Output: lista di personaggi che conoscono entrambi
+  */
+  app.get('/character/commonKnown/:firstCharacterName/:secondCharacterName', CharacterControl.commonKnownCharacters);
+
+  /*
+      Input: nome di due personaggi
+      Output: il percorso minore per arrivare da uno all'altro
+  */
+  app.get('/character/shortestPath/:fromName/:toName', CharacterControl.shortestPath);
+
+  /*
       Output: Tutti i personaggi
   */
   app.get('/characters', CharacterControl.findAll);

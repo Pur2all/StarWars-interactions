@@ -162,6 +162,43 @@ class Character {
         });
   }
 
+  static async commonKnownCharacters(firstCharacterName, secondCharacterName) {
+    const session = driver.session();
+
+    return session.run('MATCH (n:Character {name: $name1})-[:SPEAK_WITHIN_IN_THE_SAME_SCENE]-(m:Character) \
+                        WITH collect(m.name) AS result \
+                        MATCH (n:Character {name: $name2})-[:SPEAK_WITHIN_IN_THE_SAME_SCENE]-(m) \
+                        WHERE m.name IN result \
+                        RETURN m',
+    {
+      name1: firstCharacterName,
+      name2: secondCharacterName,
+    })
+        .then((result) => {
+          session.close();
+
+          return result.records.map((record) => record.get('m').properties);
+        });
+  }
+
+  static async shortestPath(fromName, toName) {
+    const session = driver.session();
+
+    return session.run('MATCH (from:Character {name: $from}), (to:Character {name: $to}) \
+                        CALL apoc.algo.dijkstra(from, to, \'SPEAK_WITHIN_IN_THE_SAME_SCENE\', \'null\', 1) \
+                        YIELD path \
+                        RETURN path',
+    {
+      from: fromName,
+      to: toName,
+    })
+        .then((result) => {
+          session.close();
+
+          return result.records[0].get('path').segments;
+        });
+  }
+
   static async findAll() {
     const session = driver.session();
 
