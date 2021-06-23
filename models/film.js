@@ -95,7 +95,7 @@ class Film {
         .then((result) => {
           session.close();
 
-          return result.records.map((record) => record.get('f'));
+          return result.records.map((record) => record.get('f').properties);
         });
   }
 
