@@ -85,6 +85,15 @@ const search = (req, res) => {
       });
 };
 
+const searchAll = (req, res) => {
+  Character.searchAll()
+      .then((result) => {
+        res.status(OK_STATUS)
+            .send({characters: result});
+      });
+};
+
+
 export default {
   find,
   filmsCharacterAppeared,
@@ -96,4 +105,5 @@ export default {
   shortestPath,
   findAll,
   search,
+  searchAll,
 };

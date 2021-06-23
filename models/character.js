@@ -229,6 +229,20 @@ class Character {
           return result.records.map((r) => r.get('characters').properties);
         });
   }
+
+  static async searchAll() {
+    const session = driver.session();
+
+    return session.run(
+        'MATCH (characters:Character) \
+         RETURN characters',
+    )
+        .then((result) => {
+          session.close();
+
+          return result.records.map((r) => r.get('characters').properties);
+        });
+  }
 }
 
 

@@ -56,4 +56,6 @@ export default (app) => {
   app.get('/characters', CharacterControl.findAll);
 
   app.get('/characters/search/:characterName', CharacterControl.search);
+
+  app.get('/characters/searchAll', CharacterControl.searchAll);
 };
