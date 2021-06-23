@@ -66,9 +66,13 @@ const shortestPath = (req, res) => {
       .then((result) => {
         const path = [];
 
-        for (let i = 0; i < result.length; i++) {
-          path.push(result[i].start.properties.name);
-          path.push(result[i].end.properties.name);
+        if (result.length > 0) {
+          path.push(result[0].start.properties.name);
+          path.push(result[0].end.properties.name);
+
+          for (let i = 1; i < result.length; i++) {
+            path.push(result[i].end.properties.name);
+          }
         }
 
         res.status(OK_STATUS)
