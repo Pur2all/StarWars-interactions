@@ -35,26 +35,41 @@
               </div>
             </div>
         </div>
-        <select id="selectbellixima" class="form-select" multiple aria-label="multiple select example">
-        </select>
-        <button type="button" onclick="search()" class="btn btn-warning">Cerca interazioni personaggi</button>
-        <div class="col-md-12">
-          <div class="row p-3">
-            <div class="col-md-6">
+        <div class="row g-0" style="margin-top: 20px;margin-bottom:20px">
+          <div class="col-md-6">
+            <select id="selectbellixima" class="form-select" multiple aria-label="multiple select example">
+            </select>
+            <button type="button" onclick="search()" style="width:100%;margin-top:10px" class="btn btn-warning">Cerca interazioni personaggi</button>
+        </div>
+        <div class="col-md-6">
+          <div class="row px-3">
+            <div class="col-md-12">
               <div class="">
-              Interazioni con personaggio selezionato: 
+              Interazioni con personaggio/i selezionato/i: 
               </div>
               <br>
-              <ul id="spawnCharInter" class="list-group list-unstyled list-group-flush">
-              </ul>
+              <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                <div id="spawnCharInter" class="carousel-inner">
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
+      </div>
     </main>
   
     <%- include('./footer.ejs') %>
   </div>
   <script>
+    $('#carouselExampleControls').css('display', 'none');
     function search()
     {
       selectedValues = $('#selectbellixima').val();
@@ -63,9 +78,24 @@
       {
         const personaggiInterazioni = ajaxCall('/character/interactions/'+selectedValuesString+'/<%=film["title"]%>');
         let stringaDaAppendere = "";
-        personaggiInterazioni.interactions.forEach(element => stringaDaAppendere+='<li><a href="/character/'+element[2]['name']+'">'+element[2]['name']+'</a></li>');
+        let count = 0;
+        personaggiInterazioni.interactions.forEach(element => 
+        {
+          if(count == 0)          
+          {
+            stringaDaAppendere+='<div class="carousel-item active"><svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="100" height="100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Second slide" preserveAspectRatio="xMidYMid slice" focusable="false"><title><a href="/character/'+element[2]['name']+'">'+element[2]['name']+'</a></title><rect width="100%" height="100%" fill="none"></rect><text x="50%" y="50%" fill="#444" dy=".3em"></rect><text x="50%" y="50%" fill="#444" dy=".3em"><a href="/character/'+element[2]['name']+'">'+element[2]['name']+'</a></text><div class="carousel-caption d-none d-md-block"><h5><a href="/character/'+element[2]['name']+'">'+element[2]['name']+'</a></h5></div></div>';
+            count+=1;
+          }
+          else
+          {
+            stringaDaAppendere+='<div class="carousel-item"><svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="100" height="100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Second slide" preserveAspectRatio="xMidYMid slice" focusable="false"><title><a href="/character/'+element[2]['name']+'">'+element[2]['name']+'</a></title><rect width="100%" height="100%" fill="none"></rect><text x="50%" y="50%" fill="#444" dy=".3em"></rect><text x="50%" y="50%" fill="#444" dy=".3em"><a href="/character/'+element[2]['name']+'">'+element[2]['name']+'</a></text><div class="carousel-caption d-none d-md-block"><h5><a href="/character/'+element[2]['name']+'">'+element[2]['name']+'</a></h5></div></div>';
+          }
+        });
+        count+=1;      
+
         $('#spawnCharInter').empty();
         $('#spawnCharInter').append(stringaDaAppendere);
+        $('#carouselExampleControls').css('display', 'block')
       }
     }
     var films = JSON.parse(htmlDecode("<%= JSON.stringify(film) %>"));

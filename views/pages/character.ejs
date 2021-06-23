@@ -101,15 +101,6 @@
 
                   <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                     <div id="personaggiCheNonConosce" class="carousel-inner">
-                      <div class="carousel-item active">
-                        <img src="/img/logo.png" class="d-block w-20 h-20" alt="...">
-                      </div>
-                      <div class="carousel-item">
-                        <img src="/img/logo.png" class="d-block w-20 h-20" alt="...">
-                      </div>
-                      <div class="carousel-item">
-                        <img src="/img/logo.png" class="d-block w-20 h-20" alt="...">
-                      </div>
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -120,10 +111,42 @@
                       <span class="visually-hidden">Next</span>
                     </button>
                   </div>
-
                 </div>
               </div>
             </div>
+            <div class="col-md-12">
+              <div class="row p-3">
+                <div class="col-md-6">
+                  <div class="">
+                    Seleziona personaggio:
+                  </div>
+                  <select id="select1" class="form-select">
+                  </select>
+                  <button type="button" onclick="search()" style="width:100%;margin-top:10px" class="btn btn-warning">Cerca interazioni personaggi</button>
+                  <div class="">
+                    Ha interagito con il personaggio selezionato?:
+                  </div>
+                  <div id="interazioneConPersonaggio">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="">
+                    Seleziona personaggio:
+                  </div>
+                  <select id="select2" class="form-select">
+                  </select>
+                  <button type="button" onclick="search1()" style="width:100%;margin-top:10px" class="btn btn-warning">Cerca interazioni personaggi</button>
+                  <div class="">
+                    Film in cui i due personaggi compaiono insieme e il numero di volte in cui compaiono insieme:
+                  </div>
+                  <div id="carouselExampleControls2" class="carousel slide" data-bs-ride="carousel">
+                    <div id="interazioneConPersonaggioCompaionoInsieme" class="carousel-inner">
+                    </div>
+                  </div>
+                </div>
+             </div>
+           </div>  
+
           </div>
       </div>
 
@@ -135,7 +158,7 @@
    var character = JSON.parse(htmlDecode("<%= JSON.stringify(character) %>"));
    //FILM IN CUI APPARE
    const filmInCuiAppare = ajaxCall('/character/films/<%=character["name"]%>');
-   let stringaFilmInCuiAppare = '<div class="row">';
+   let stringaFilmInCuiAppare = '<div class="row justify-content-center">';
    filmInCuiAppare.films.forEach(element => {
     if(element["imgLink"] != null)
      stringaFilmInCuiAppare+='<div class="col-sm-6"><div class="card" style="border:none;background:none;"><div class="card-body"><div class="card-text"><span><img src='+'"'+element["imgLink"]+'" style="max-width: 150px;max-height: 150px;margin-top:20px" class="img-thumbnail" alt="img_not_found"></span></div><h5 class="card-title"><a href="/film/'+element['title']+'">'+element['title']+'</a></div></div></div>'
@@ -174,7 +197,6 @@
 
    //PRIMA MENZIONE IN ORDINE DI STORIA DEI FILM
    const filmMenzioneInOrdineDiStoriaDelFilm = ajaxCall('/film/mentioned/firstTimeStory/<%=character["name"]%>');
-   console.log(filmMenzioneInOrdineDiStoriaDelFilm)
    let stringaFilmMenzioneInOrdineDiStoriaDelFilm = '<div class="row justify-content-center">';
     filmMenzioneInOrdineDiStoriaDelFilm.film.forEach(element => {
     if(element["imgLink"] != null)
@@ -202,7 +224,6 @@
    //PERSONAGGI CHE NON CONOSCE
    const personaggiCheNonConosce = ajaxCall('/character/notknows/<%=character["name"]%>');
    let stringaPersonaggiCheNonConosce = '';
-    console.log(personaggiCheNonConosce);
     count = 0;
     personaggiCheNonConosce.characters.forEach(element => {
     if(element["image"] != null)
@@ -232,7 +253,28 @@
     });
    $('#personaggiCheNonConosce').empty();
    $('#personaggiCheNonConosce').append(stringaPersonaggiCheNonConosce);
-
+   
+   //Fai selezionare un altrio personaggio oltre a quello della pagina in c ui ti trovi e restituisci true o false a seconda se i personaggi hanno interagito oppure no (/character/interacted/:characterName1/:characterName2)
+   const personaggi = ajaxCall('/characters/searchAll');
+   let stringaDaAppendereAllaSelect = "";
+   personaggi.characters.forEach(element => stringaDaAppendereAllaSelect+='<option value='+'"'+element['name']+'"'+'>'+element['name']+'</option>');
+   $('#select1').append(stringaDaAppendereAllaSelect);
+   $('#select2').append(stringaDaAppendereAllaSelect);
+   function search()
+   {
+      selectedValues = $('#select1').val();
+      const selectedValuesString = selectedValues.toString();
+      $('#carouselExampleControls1').css('display', 'none')
+      if(selectedValuesString)
+      {
+        const personaggiInterazione = ajaxCall('/character/interacted/<%= character["name"] %>/'+selectedValuesString).isAppeared[0];
+        $('#interazioneConPersonaggio').empty();
+        if(personaggiInterazione)
+          $('#interazioneConPersonaggio').append('si');
+        else
+          $('#interazioneConPersonaggio').append('no');
+      }
+    }
  </script> 
 </body>
 </html>
