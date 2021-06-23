@@ -17,3 +17,17 @@
     background-color: #ffc107;
     color:black;
 }
+
+a
+{
+    color:#ffc107;
+}
+a:hover
+{
+    color:#ffd968;
+}
+
+.carousel-control-next-icon,.carousel-control-prev-icon
+{
+    background-color:#ffc107;
+}
