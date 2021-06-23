@@ -170,7 +170,7 @@ class Character {
                         WITH collect(m.name) AS result \
                         MATCH (n:Character {name: $name2})-[:SPEAK_WITHIN_IN_THE_SAME_SCENE]-(m) \
                         WHERE m.name IN result \
-                        RETURN m',
+                        RETURN DISTINCT m',
     {
       name1: firstCharacterName,
       name2: secondCharacterName,
