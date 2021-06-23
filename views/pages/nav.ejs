@@ -1,3 +1,6 @@
+<head>
+  <script src="/js/utils.js"></script>
+</head>
 <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="../"><img width="130" height="60" src="/img/logo.png"></a>
@@ -10,10 +13,30 @@
             <a class="nav-link active" aria-current="page" href="../">Home</a>
           </li>
         </ul>
-        <form style="width: 100%;" class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Cerca film e personaggi" aria-label="Search">
-          <button class="btn btn-outline-warning" type="submit">Cerca</button>
+        <form id="searchBar" style="width: 100%;"  class="d-flex">
+          <input id="inputText" class="form-control me-2" type="search" placeholder="Cerca film e personaggi" aria-label="Search">
+          <button  class="btn btn-outline-warning" type="submit">Cerca</button>
         </form>
       </div>
     </div>
   </nav>
+
+  <script>
+      $("#searchBar").submit(function(e){
+        e.preventDefault();
+        const input = $('#inputText').val();
+      const resultCharacter = ajaxCall('/characters/search/' + input);     
+     // const resultFilm = ajaxCall('/film/search' + input);
+      if(resultCharacter.characters.length != 0){
+        window.location.href = '/character/' + resultCharacter.characters[0].name;
+        return
+      }
+
+      const resultFilm = ajaxCall('/film/search/' + input);
+      if(resultFilm.films.length != 0){
+        window.location.href = '/film/' + resultFilm.films[0].title;
+        return
+      }
+      alert('Personaggio o film non trovati')
+      });
+  </script>

@@ -179,11 +179,8 @@ class Film {
 
     return session.run(
         'MATCH (film:Film) \
-         WHERE film.title =~ \'(?i).*$title.*\' \
+         WHERE film.title =~ \'(?i).*' + filmTitle + '.*\' \
          RETURN film',
-        {
-          title: filmTitle,
-        },
     )
         .then((result) => {
           session.close();
