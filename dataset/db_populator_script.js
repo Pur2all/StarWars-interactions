@@ -103,7 +103,6 @@ const charactersImg = {
   'JERJERROD': 'https://static.wikia.nocookie.net/starwars/images/2/28/Jerjerrod.jpg/revision/latest?cb=20141128135138&path-prefix=it',
   'BOUSHH': 'https://static.wikia.nocookie.net/starwars/images/4/49/Leia_Organ_Boushh_AtG.png/revision/latest?cb=20181206071111',
   'ADMIRAL ACKBAR': 'https://static.wikia.nocookie.net/starwars/images/2/29/Admiral_Ackbar_RH.png/revision/latest?cb=20170907053204',
-
 };
 
 (async () => {
@@ -224,7 +223,11 @@ const charactersImg = {
         console.log('Some info not found for character ' + character.name);
       }
       try {
-        const html = await axios.get('https://en.wikipedia.org/wiki/' + (characterProps != undefined ? characterProps.name : character.name));
+        if (characterProps == undefined) {
+          characterProps = {};
+          characterProps.name = character.name;
+        }
+        const html = await axios.get('https://en.wikipedia.org/wiki/' + characterProps.name);
         const $ = cheerio.load(html.data);
 
         const image = $('.infobox-image')
@@ -235,18 +238,14 @@ const charactersImg = {
           throw new Error('No image');
         }
 
-        if (characterProps == undefined) {
-          characterProps = {};
-        }
-
         characterProps.image = image;
       } catch (error) {
-        console.log('Cannot find image for character: ' + ((characterProps != undefined && characterProps.name != undefined) ? characterProps.name : character.name));
+        characterProps.image = charactersImg[characterProps.name];
       }
       if (characterProps != undefined) {
         return tx.run(
             'MATCH (character:Character {name: $name}) \
-           SET character = $props',
+             SET character = $props',
             {
               name: character.name,
               props: characterProps,
